@@ -1,0 +1,2329 @@
+﻿<!doctype html>
+<html lang="es" data-op="2" data-fr="def">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sofi &amp; Fede · [fecha TBD]</title>
+<!-- Diseño definitivo horneado: opción 2 (Bona Nova SC) + frase "Sempiterno" (def).
+     Era el playground opciones/ver.html parametrizado por ?op/?fr; los novios
+     eligieron op2 + variante "con significado", así que queda fijo en el <html>. -->
+<!-- Dos invitaciones, misma fuente: la raíz (/) es para invitados solos; /dos
+     muestra el segundo bloque de invitado en Confirmación. El rewrite de
+     vercel.json sirve /dos desde este mismo archivo; acá solo marcamos data-inv. -->
+<script>(function(){var p=location.pathname,s=location.search,d=document.documentElement;if(/(^|\/)dos\/?$/.test(p)||/[?&]dos\b/.test(s))d.setAttribute("data-inv","2");
+/* La seccion FOTOS recien tiene sentido el dia de la boda (album para subir
+   fotos de la fiesta). Antes solo ocupa espacio -> se oculta hasta esa fecha.
+   Se decide aca, en el <head>, para que el sendero ya mida sin esa seccion.
+   Override para previsualizar: ?fotos=on (forzar visible) / ?fotos=off (ocultar). */
+// SOFI & FEDE — TODO(fase A/brief): fijar la fecha real de la boda. Placeholder lejano
+// para que FOTOS quede oculta por defecto hasta definirla.
+var fm=/[?&]fotos=(on|off)\b/.exec(s);
+var fotosOn=fm?fm[1]==="on":Date.now()>=new Date('2099-01-01T00:00:00-03:00').getTime();
+if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
+
+<!-- ==========================================================================
+     CONFIG — Pegá acá las 3 URLs. Es el ÚNICO lugar que hay que tocar para
+     conectar la invitación. No toca el diseño ni la lógica.
+       · RSVP_ENDPOINT      → URL del Apps Script (web app) que guarda en la Sheet.
+                              Pasos para obtenerla: ver apps-script/SETUP.md
+       · SPOTIFY_PLAYLIST   → URL de la playlist colaborativa de Spotify.
+       · PHOTOS_URL         → URL de la carpeta de Drive/Fotos (modo "aportar").
+     Mientras una quede vacía (''), su sección se oculta/queda inerte sola.
+     ========================================================================== -->
+<script>
+  window.WEDDING_CFG = {
+    // SOFI & FEDE — vacías hasta fase E (integraciones, bead wedding-6).
+    // Mientras estén '' cada sección se oculta/queda inerte sola.
+    // NO pegar acá las URLs de otra boda (irían al backend equivocado).
+    RSVP_ENDPOINT:    '',
+    SPOTIFY_PLAYLIST: '',
+    PHOTOS_URL:       ''
+  };
+</script>
+
+<!-- Preload de las fuentes locales New Icon: bajan con prioridad alta y antes
+     de pintar. Evita el "flash de Comic Sans" (la fuente de respaldo del
+     generico `cursive` en Windows es Comic Sans MS) mientras New Icon Script
+     carga. crossorigin es obligatorio en preload de fuentes. -->
+<link rel="preload" href="/fonts/NewIconScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/NewIconSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/NewIconSerif-Condensed.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Cortex genera tokens.css: paleta calida + rampas tonales por hue. -->
+<link rel="stylesheet" href="/tokens.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Birthstone&family=Bona+Nova+SC:wght@400;700&family=DM+Sans:opsz,wght@9..40,400..700&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Playfair+Display+SC:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     EL SENDERO — invitacion digital Agus & Santi
+     Single-file. Concepto: una linea de tinta que se dibuja al
+     scrollear y serpentea entre las paradas (secciones).
+     ============================================================ */
+
+  /* ---- Fuentes locales: New Icon (duo serif + script) ---- */
+  @font-face {
+    font-family: 'New Icon Serif';
+    src: url('/fonts/NewIconSerif-Regular.woff2') format('woff2'),
+         url('/fonts/NewIconSerif-Regular.woff') format('woff');
+    /* block (no swap): mientras carga, texto invisible en vez de mostrar la
+       fuente de respaldo. Con preload + archivo local, el bloqueo es de ms. */
+    font-weight: 400; font-style: normal; font-display: block;
+  }
+  @font-face {
+    font-family: 'New Icon Serif Condensed';
+    src: url('/fonts/NewIconSerif-Condensed.woff2') format('woff2'),
+         url('/fonts/NewIconSerif-Condensed.woff') format('woff');
+    font-weight: 400; font-style: normal; font-display: block;
+  }
+  @font-face {
+    font-family: 'New Icon Script';
+    src: url('/fonts/NewIconScript-Regular.woff2') format('woff2'),
+         url('/fonts/NewIconScript-Regular.woff') format('woff');
+    font-weight: 400; font-style: normal; font-display: block;
+  }
+
+  /* ---- Paleta: viene de tokens.css (generado por Cortex). Ver build-tokens.mjs.
+     Disponibles: --cream, --cream-2, --ink, --ink-soft, --ink-name, --terra,
+     --terra-deep, --sage, --gold, --marron, --line, --line-strong, mas rampas
+     tonales por hue (--neutral-XX, --terra-XX, --sage-XX, --gold-XX). ---- */
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { background: #e6dfce; }
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---- El "papel": 390px centrado. Textura real cold-press cream extraida
+     de la composicion floral 271732_1, se repite verticalmente. El --cream
+     queda como fallback si la imagen tarda en cargar. ---- */
+  .stage {
+    position: relative;
+    /* PERF/RESPONSIVE (jun 2026): antes era width:390px fijo -> en celulares mas
+       anchos (430px) quedaban bandas del fondo a los costados. Ahora llena el
+       ancho del celular (100%) con tope en desktop. */
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    background-color: var(--cream);
+    background-image: url('/fondos/paper-tile.jpg');
+    background-repeat: repeat;
+    background-size: 390px auto;
+    overflow: hidden;
+    box-shadow: 0 0 90px rgba(0,0,0,0.07);
+  }
+
+  /* ---- Capa del sendero (SVG que recorre toda la pagina) ---- */
+  .trail {
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  /* SENDERO COMO ENREDADERA CONTINUA:
+     - .trail-ghost = guia hairline punteada que serpentea de punta a punta.
+     - .trail-ink   = tallo verde que se "dibuja" con el scroll.
+     - .trail-leaf  = piezas watercolor PNG distribuidas a lo largo del path,
+       absolute-positioned sobre .sendero, con mix-blend-mode: multiply para
+       que el fondo cream de la imagen se "absorba" en el papel del stage.  */
+  /* El path SVG NO se ve: lo reemplazamos visualmente con los segmentos del
+     tallo watercolor distribuidos por JS. El path se mantiene para
+     getPointAtLength() y la animacion al scroll. */
+  .trail-ghost, .trail-ink, .trail-ink-shade, .trail-pen { display: none; }
+
+  /* Segmentos del tallo watercolor distribuidos a lo largo del path SVG.
+     Mask-image con gradient en los extremos para fundirse entre vecinos. */
+  .trail-stem {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    transform-origin: center center;
+    z-index: -1;
+    /* PERF (jun 2026): el aclarado/desaturado/blur + el fade vertical antes
+       estaban como filter + mask-image POR elemento (1100+ elementos = doble
+       compositing carisimo). Ahora estan HORNEADOS en segment-opt.png, asi que
+       cada tallo es un <img> plano (solo opacity + transform = GPU, barato). */
+  }
+  .trail-stem.in { opacity: 0.09; }
+  .trail-leaf {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.7s ease;
+    transform-origin: center center;
+    z-index: 1;
+  }
+  .trail-leaf.in { opacity: 1; }
+
+  /* ---- Contenido por encima del sendero ---- */
+  .sendero { position: relative; z-index: 2; }
+
+  /* ============================================================
+     PARADAS
+     ============================================================ */
+  .stop {
+    position: relative;
+    padding: 48px 26px;
+  }
+  .stop-body { max-width: 308px; }
+  .stop[data-side="left"]  .stop-body { margin-right: auto; }
+  .stop[data-side="left"] .stop-body { margin-left: auto; }
+  /* secciones centradas: usar para "paradas poster" donde el contenido
+     funciona como bloque focal (numeros grandes, tipografia poster). Las
+     secciones narrativas se quedan asimetricas. */
+  .stop[data-side="center"] .stop-body { margin: 0 auto; text-align: center; }
+  .stop[data-side="center"] .stop-node {
+    left: 50%; right: auto; transform: translateX(-50%);
+  }
+  .stop[data-side="center"] .stop-wash {
+    left: 50%; right: auto; top: 30px; transform: translateX(-50%) scale(.6);
+  }
+  .stop[data-side="center"] .stop-wash.in { transform: translateX(-50%) scale(1); }
+  /* kicker centrado: linea hairline a ambos lados, como divisoria */
+  .stop[data-side="center"] .kicker { justify-content: center; }
+  .stop[data-side="center"] .kicker::before {
+    content: ""; flex: 1; height: 0.5px; background: var(--line-strong);
+    transform: scaleX(0); transform-origin: right;
+    transition: transform 0.8s cubic-bezier(.2,.7,.2,1) 0.3s;
+  }
+  .stop[data-side="center"] .kicker.in::before { transform: scaleX(1); }
+
+  /* nodo: punto del sendero en cada parada.
+     Visualmente OCULTO (visibility: hidden) — sigue en el DOM porque el
+     JS necesita su posicion para calcular el path del sendero. La marca
+     visual de cada seccion es ahora la hairline del kicker, que se dibuja
+     cuando la enredadera pasa por ese nodo. */
+  .stop-node {
+    position: absolute;
+    top: 104px;
+    width: 9px; height: 9px;
+    visibility: hidden;
+  }
+  .stop[data-side="left"]  .stop-node { right: 30px; }
+  .stop[data-side="left"] .stop-node { left: 30px; }
+
+  /* wash de acuarela detras de cada parada */
+  .stop-wash {
+    position: absolute;
+    z-index: -1;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(.6);
+    transition: opacity 1.5s ease, transform 1.8s cubic-bezier(.2,.7,.2,1);
+  }
+  .stop-wash.in { opacity: .55; transform: scale(1); }
+  .stop[data-side="left"]  .stop-wash { right: -90px; top: 30px; }
+  .stop[data-side="left"] .stop-wash { left: -90px;  top: 30px; }
+  .wash-terra { background: radial-gradient(circle at 50% 50%, var(--terra) 0%, rgba(192,115,74,0) 62%); }
+  .wash-sage  { background: radial-gradient(circle at 50% 50%, var(--sage)  0%, rgba(139,148,113,0) 62%); }
+  .wash-gold  { background: radial-gradient(circle at 50% 50%, var(--gold)  0%, rgba(198,160,106,0) 62%); }
+
+  /* ---- kicker comun ---- */
+  .kicker {
+    font-size: 10.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center; /* la hairline queda centrada con el texto, no en la base */
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+  .kicker i {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    letter-spacing: 0;
+    color: var(--terra-deep);
+    text-transform: none;
+  }
+  .kicker::after {
+    content: "";
+    flex: 1;
+    height: 0.5px;
+    background: var(--line-strong);
+    transform: scaleX(0); transform-origin: left;
+    /* el retardo (0.3s) hace que la linea se dibuje DESPUES de que aparece
+       el nombre de la seccion; el resto del contenido entra despues (ver el
+       stagger en el JS). */
+    transition: transform 0.8s cubic-bezier(.2,.7,.2,1) 0.3s;
+  }
+  .kicker.in::after { transform: scaleX(1); }
+
+  /* ---- titulos y textos comunes ---- */
+  .stop-title {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 38px;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .stop-lead {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 18px;
+  }
+  .copy {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    margin-top: 16px;
+  }
+  .script-accent {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 35px;
+    color: var(--terra);
+    line-height: 1;
+    margin-top: 10px;
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;   /* texto en la zona baja de la foto (sobre los cuerpos, no las caras) */
+    text-align: center;
+    padding: 48px 30px calc(168px + 10vh + 260px);  /* todo el bloque (Nos casamos + nombres + fecha) subido ~260px para no tapar las caras (jun 2026) */
+    overflow: hidden;
+  }
+  /* Decoracion floral del hero (composicion-2 en ambas esquinas top) */
+  .hero-flora {
+    position: absolute;
+    top: -20px;
+    width: 240px;
+    height: auto;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+    animation: heroFloraIn 1.6s ease 0.4s both;
+  }
+  .hero-flora-left  { left: -50px; }
+  .hero-flora-right { right: -50px; transform: scaleX(-1); }
+  @keyframes heroFloraIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Decoracion floral en paradas centradas (countdown) o laterales (regalos).
+     Misma logica: PNG con mix-blend-mode multiply para integrar al papel.
+     Quedan siempre visibles (se descubren al scrollear naturalmente). */
+  .stop-flora {
+    position: absolute;
+    width: 220px;
+    height: auto;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .stop-flora-top   { top: 0px; left: 50%; transform: translateX(calc(-50% - 35px)); width: 255px; }
+  .stop-flora-right { top: -10px; right: -60px; transform: scaleX(-1); width: 200px; }
+
+  .hero-eyebrow { margin-top: -33px; margin-bottom: 6px; }
+  /* width controla el tamano del SVG (texto + arco). 290px ≈ +10% sobre 264.
+     translateX corre "Nos casamos" a la derecha para centrarlo OPTICAMENTE con
+     los nombres (que quedan apoyados a la derecha por los swashes de A y S). */
+  .eyebrow-arc { display: block; width: 290px; height: auto; margin: 0 auto; transform: translateX(14px); }
+  .eyebrow-arc text {
+    font-family: 'New Icon Serif', serif;
+    font-size: 15px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    fill: var(--cream);
+  }
+  .hero-names {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    line-height: 1;
+    position: relative;
+    /* el <h1> trae bold por defecto, pero New Icon solo tiene peso regular ->
+       el navegador fabricaba una negrita falsa. Forzamos 400 (peso real fino). */
+    font-weight: 400;
+  }
+  /* cada novio: nombre + apellido apilados */
+  .name-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
+     centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
+  .hero-names .name-group:first-of-type { transform: translateY(-24px); }
+  .hero-names .name-group:last-of-type  { transform: translateY(15px); }
+  /* nombres: inicial en script + resto del nombre en serif mayuscula.
+     Sin escalon (translateX): el swash de la A script es ancho y el
+     .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
+     recorta. Se mantienen los nombres centrados. */
+  .name-row {
+    white-space: nowrap;
+    line-height: 1.05;
+    /* el swash de la script desborda la caja de texto; el padding lo mete
+       DENTRO del border-box para que el wipe (clip-path) no lo recorte.
+       El margin negativo cancela ese padding en el flujo (no cambia el
+       espaciado entre Agus / & / Santi). */
+    padding: 34px 80px;
+    margin: -34px 0;
+  }
+  .ini {
+    font-family: 'New Icon Script', cursive;
+    font-size: 93px;
+    line-height: 1;
+    color: var(--cream);
+  }
+  .rest {
+    font-family: 'New Icon Serif', serif;
+    font-size: 75px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+  /* "&" detras de los nombres (idea de la referencia ANA & FERNANDO):
+     absoluto y centrado en el bloque de nombres. Tamano moderado: pisa
+     PARCIALMENTE los nombres (no los tapa). z-index 0 -> los nombres
+     (z-index 1) quedan legibles encima y el & asoma en los huecos.
+     text-align center para que el glifo quede bien centrado en su caja. */
+  .hero-amp {
+    font-family: 'New Icon Script', cursive;
+    font-size: 108px;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.45);  /* blanco translucido sobre la foto */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* corrido ~10px a la derecha: el rulito del glifo script sale a la
+       izquierda y hace que la letra PAREZCA descentrada; este nudge la
+       compensa opticamente. */
+    transform: translate(calc(-50% + 23px), -50%);
+    text-align: center;
+    z-index: 0;
+    pointer-events: none;
+  }
+  /* ===== ENTRADA de los nombres: fundido + leve subida =====
+     "Agus & Santi" entra con un fundido parejo (iniciales y resto de cada
+     nombre por igual), escalonado A -> S, y el "&" con fundido + leve escala.
+     Todo opacity/transform (sin filter:blur) -> fluido. Lo dispara el JS. */
+  /* La transicion CSS solo aplica en el FALLBACK (clase .anim). Con GSAP la
+     animacion la maneja la libreria por frame: si dejaramos la transicion,
+     pelearia con GSAP (arrastre/lag). Por eso va scopeada a .hero-names.anim. */
+  .hero-names.anim .ini,
+  .hero-names.anim .rest { transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+
+  /* ===== Write-on "tinta que entra" (solo en la rama GSAP) =====
+     La inicial real (.ini) se revela con un barrido en direccion de escritura,
+     como tinta asentandose. --ink va de 100 (oculta) a 0 (revelada), animado
+     por GSAP. inline-block + padding/margin que se cancela: mete el swash de la
+     A dentro del border-box para que la mascara del barrido no lo recorte. */
+  .ini.inking {
+    display: inline-block;
+    padding: 30px 86px;
+    margin: -30px -86px;
+    -webkit-mask-image: linear-gradient(100deg, #000 0 34%, transparent 54% 100%);
+            mask-image: linear-gradient(100deg, #000 0 34%, transparent 54% 100%);
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: 320% 100%; mask-size: 320% 100%;
+    -webkit-mask-position: calc(var(--ink, 100) * 1%) center;
+            mask-position: calc(var(--ink, 100) * 1%) center;
+  }
+
+  /* arranque (clase .anim, la agrega el JS): se oculta todo para la entrada */
+  .hero-names.anim .ini,
+  .hero-names.anim .rest { opacity: 0; transform: translateY(12px); }
+  .hero-names.anim .hero-amp { opacity: 0; transform: translate(calc(-50% + 23px), -50%) scale(.88); }
+
+  /* cada nombre entra al agregarse .show (JS, escalonado) */
+  .hero-names.anim .ini.show,
+  .hero-names.anim .rest.show { opacity: 1; transform: none; }
+  /* el "&" entra con fundido + leve escala (mantiene su nudge optico +23px) */
+  .hero-names.anim.amp-in .hero-amp {
+    opacity: 1; transform: translate(calc(-50% + 23px), -50%) scale(1);
+    transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+
+  /* ===== ENTRADA DEL HERO (secuencia al abrir la invitacion) =====
+     1) "Nos casamos" (fade + subida) -> 2) las iniciales se DIBUJAN solas y
+     entran "gus"/"anti" + "&" (write-on, disparado por JS arriba) -> 3) la
+     fecha hace un focus-in (desenfoque + interletrado que se cierra) -> 4)
+     "Segui el sendero" entra y queda con un bob sutil que invita a scrollear. */
+  .hero-eyebrow { animation: heroIn 0.7s cubic-bezier(.2,.7,.2,1) 0.25s both; }
+  @keyframes heroIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .hero-date { animation: dateFocusIn 1s cubic-bezier(.2,.7,.2,1) 2.7s both; }
+  @keyframes dateFocusIn {
+    from { opacity: 0; letter-spacing: 0.5em;  filter: blur(6px); }
+    to   { opacity: 1; letter-spacing: 0.16em; filter: blur(0); }
+  }
+  .hero-scroll { animation: scrollIn 0.7s ease 3.3s both; }
+  @keyframes scrollIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes scrollBob { 0%, 100% { transform: translate(6px, 0); } 50% { transform: translate(6px, 6px); } }
+  .hero-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 82px;
+  }
+  /* florcita watercolor como divisor arriba de la fecha (reemplaza la hairline).
+     Chica y delicada para no competir con los nombres. Corrida +12px para
+     alinearse con la fecha (mismo corrimiento optico). */
+  .hero-flower { width: 48px; height: auto; transform: translateX(12px); }
+  .hero-date {
+    font-family: 'New Icon Serif', serif;
+    font-size: 34.8px;  /* +20% sobre 29px (jun 2026) */
+    letter-spacing: 0.16em;
+    color: var(--cream);
+    /* nowrap: la animacion dateFocusIn arranca con letter-spacing 0.5em (muy
+       abierto). Sin esto, con ese espaciado la fecha se parte en 2 lineas (alto
+       66px) y al cerrarse el espaciado vuelve a 1 (alto 33px): como el hero
+       esta anclado abajo (flex-end), esos 33px que se pierden empujaban TODO el
+       texto hacia abajo de golpe (el "glitch"). Con nowrap el alto es constante. */
+    white-space: nowrap;
+    /* mismo corrimiento optico que la linea de arriba (+12px): la fecha estaba
+       centrada a la pagina pero los nombres se apoyan a la derecha, asi que
+       quedaba corrida a la izquierda respecto al resto del hero.
+       translateY(168px): baja SOLO la fecha (98px + 70px mas) (jun 2026). */
+    transform: translateX(12px) translateY(168px);
+  }
+  /* FOTO DE FONDO del hero: capa absoluta con la foto + scrim (degradado
+     oscuro para legibilidad del texto) + borde superior en ARCO + fade abajo
+     que la funde con la siguiente seccion (crema).
+     El scrim es suave arriba (se ven las caras) y mas oscuro en la zona baja
+     (donde va el texto). Knobs: los % y opacidades del primer gradiente. */
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(to bottom,
+        rgba(46,36,28,0.30) 0%,
+        rgba(46,36,28,0.30) 24%,
+        rgba(46,36,28,0.50) 46%,
+        rgba(46,36,28,0.60) 68%,
+        rgba(46,36,28,0.56) 86%,
+        rgba(46,36,28,0.00) 100%),
+      url('/assets/noviosheader2.webp');
+    background-size: cover, auto 125%;   /* foto con zoom 125% para poder recortar cielo */
+    /* y al 100%: ancla la foto al fondo -> recorta mas cielo de arriba y SUBE
+       a los novios en el cuadro. (Subir el 125% = mas zoom; mover el % = encuadre.) */
+    background-position: center, center 60%;  /* foto deslizada hacia abajo: recupera arriba, recorta abajo (jun 2026) */
+    background-repeat: no-repeat;
+    border-radius: 0;   /* esquinas rectas (sin arco) */
+    /* fade solo ABAJO: la foto se funde con el papel crema hacia la siguiente
+       seccion. Arriba va recto (sin fade). */
+    -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  }
+  /* el contenido del hero va POR ENCIMA de la foto */
+  .hero-eyebrow, .hero-names, .hero-meta, .hero-scroll { position: relative; z-index: 1; }
+  /* sombra sutil para reforzar legibilidad del texto claro sobre la foto */
+  .hero-names, .hero-date, .hero-scroll { text-shadow: 0 1px 14px rgba(28,20,14,0.5); }
+
+  /* "Segui el sendero" ahora en flujo (debajo de la foto), ya no absoluto. */
+  .hero-scroll {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+  /* el letter-spacing 0.3em deja un hueco a la derecha (espaciado final) que
+     hace ver el texto corrido a la izquierda; lo empujamos un toque a la
+     derecha para centrarlo opticamente. */
+  .hero-scroll span { display: inline-block; transform: translateX(6px); animation: scrollBob 2.6s ease-in-out 3.8s infinite; }
+  /* el nodo del hero queda invisible (solo marca el inicio del sendero) */
+  .hero .stop-node { top: auto; bottom: 96px; left: 50%; transform: translateX(-50%); opacity: 0; }
+
+  /* ============================================================
+     LA FECHA (fusion: fecha + cuenta regresiva)
+     ============================================================ */
+  /* fecha grande tipo poster: 01 · 08 · 26 — contrapeso del "01 · 08 · 2026"
+     chico del hero. Mismo dato, otra voz (puntitos iguales, tamano enorme). */
+  .big-date {
+    font-family: var(--font-title);
+    font-weight: 400;
+    font-size: 64px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--ink);
+    margin-top: 26px;
+    text-align: center;
+  }
+  /* cuenta regresiva: cada dato dentro de un circulo (hairline terra).
+     4 circulos en fila — apoyan a la fecha grande sin pelearle protagonismo. */
+  .count {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 40px;
+    max-width: 308px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .count-cell {
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--terra);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 4px;
+  }
+  .count-num {
+    display: block;
+    font-family: var(--font-title);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .count-lbl {
+    display: block;
+    font-size: 7.5px;
+    letter-spacing: 0.22em;
+    /* Compensa el spacing trailing que descentra la palabra respecto
+       al numero (el letter-spacing agrega aire al final pero no al
+       inicio del texto). */
+    text-indent: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* ============================================================
+     LUGARES (misa / fiesta): nombre, direccion debajo, divisoria
+     corta y la hora.
+     ============================================================ */
+  /* JERARQUIA (jun 2026): el NOMBRE DEL LUGAR es el protagonista (grande).
+     "La misa"/"La fiesta" quedan como kicker (divisor) arriba; el titulo
+     intermedio se elimino (feedback novio, 2026-06-20) para no duplicar. */
+
+  /* ilustracion al espacio en blanco a la derecha de la misa / la fiesta.
+     Detras del texto (z-index 0); el contenido va por encima (jun 2026). */
+  #misa, #fiesta { overflow: hidden; }
+  #misa .stop-body, #fiesta .stop-body { position: relative; z-index: 1; }
+  .misa-draw, .fiesta-draw {
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 207px;   /* -10% sobre 230 (jun 2026) */
+    width: auto;
+    z-index: 0;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+  /* la iglesia (misa) un poco mas tenue que la fiesta (jun 2026) */
+  .misa-draw { opacity: 0.5; }
+
+  /* nombre del lugar: New Icon Serif CONDENSED grande (62px), MAYUS. Es el
+     elemento focal de la parada. La condensada permite el cuerpo grande sin
+     desbordar el ancho del papel. */
+  .ev-venue {
+    font-family: var(--font-title);
+    font-size: 62px;
+    line-height: 1.0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+    margin-top: 10px;
+  }
+  .ev-address {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 14px;
+  }
+  .ev-divider {
+    display: block;
+    width: 38px;
+    height: 0.5px;
+    background: var(--terra);
+    margin: 22px 0;
+  }
+  .ev-hour {
+    font-family: var(--font-title);
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  /* ---- EL LUGAR (legacy: ev-list quedo sin uso al partir en misa/fiesta) ---- */
+  .ev-list { margin-top: 34px; border-top: 0.5px solid var(--line-strong); }
+  .ev-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 14px;
+    align-items: baseline;
+    padding: 18px 0;
+    border-bottom: 0.5px solid var(--line-strong);
+  }
+  .ev-kind {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .ev-time {
+    justify-self: end;
+    font-family: var(--font-title);
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  /* ============================================================
+     DRESSCODE
+     ============================================================ */
+  .dress {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 6px;
+  }
+  .dress-col { border-top: 0.5px solid var(--line-strong); padding-top: 14px; }
+  .dress-k {
+    font-size: 9.5px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .dress-v {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-top: 10px;
+  }
+  .dress-note {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--terra-deep);
+    margin-top: 8px;
+  }
+  /* "Elegante": mismo tratamiento que el titulo de "La fiesta" (New Icon
+     Serif 30px). La regla del blanco va debajo en .copy (sans serif). */
+  .dress-elegante {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 62px;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  /* dibujos line-art al final del dress code: saco a la IZQUIERDA, vestido a la
+     DERECHA, lado a lado y a la misma altura (mismo ancho + mismo aspect ratio
+     => misma altura), sin deformar (jun 2026) */
+  .dress-draws {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;   /* alineados por la base */
+    gap: 14px;
+  }
+  /* PNGs ya recortados (sin margen transparente): a la misma ALTURA, ancho auto
+     -> se ven grandes y proporcionados, sin espacio en blanco (jun 2026) */
+  .dress-draw {
+    display: block;
+    height: 189px;   /* -10% sobre 210 (jun 2026) */
+    width: auto;
+  }
+
+  /* ============================================================
+     NOTAS
+     ============================================================ */
+  .note-row {
+    display: flex;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 0.5px solid var(--line);
+  }
+  .note-row:first-child { border-top: 0.5px solid var(--line); }
+  .note-idx {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--terra-deep);
+    flex-shrink: 0;
+  }
+  .note-k {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .note-v {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  /* ============================================================
+     PLAYLIST
+     ============================================================ */
+  .song-statement {
+    font-family: var(--font-title);
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+  .song-statement em {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 40px;
+    color: var(--terra);
+    line-height: 1;
+  }
+
+  /* ============================================================
+     RSVP
+     ============================================================ */
+  .rsvp-display {
+    font-family: var(--font-title);
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .rsvp-deadline {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--terra-deep);
+    margin-top: 10px;
+  }
+  .rsvp-form { margin-top: 30px; }
+  /* Dos invitados (link /dos): el 2º bloque y las etiquetas "Invitado N"
+     solo aparecen con html[data-inv="2"]. En el link singular queda 1 solo. */
+  .guest[data-guest="2"] { display: none; }
+  .guest-label { display: none; }
+  .guest + .guest {
+    margin-top: 30px;
+    padding-top: 28px;
+    border-top: 0.5px solid var(--line-strong);
+  }
+  html[data-inv="2"] .guest[data-guest="2"] { display: block; }
+  html[data-inv="2"] .guest-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+    margin-bottom: 16px;
+  }
+  .field { margin-bottom: 22px; }
+  .field label {
+    display: block;
+    font-size: 9.5px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 9px;
+  }
+  /* Titulos de campo de AMBOS formularios (Confirmacion + Para los novios):
+     misma tipografia que los inputs / "Tu nombre" (Space Grotesk), caja normal
+     y poco interletrado. El "> label" apunta SOLO a los titulos de campo,
+     no a las opciones (chips / "Si voy"). */
+  #rsvp-form .field > label,
+  #msg-form .field > label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    color: var(--ink-soft);
+    margin-bottom: 11px;
+  }
+  /* inputs: misma tipografia que el kicker "Confirmacion" (Space Grotesk)
+     pero con MENOS interletrado, asi se diferencia del kicker (que va a 0.3em). */
+  .field input, .field textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 0.5px solid var(--line-strong);
+    padding: 8px 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .field textarea { resize: none; font-size: 15px; }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-bottom-color: var(--terra);
+  }
+  .field input::placeholder, .field textarea::placeholder {
+    color: var(--line-strong);
+    font-style: italic;
+  }
+  .radio-group { display: flex; gap: 10px; }
+  .radio-group label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    padding: 13px 12px;
+    border: 0.5px solid var(--line-strong);
+    cursor: pointer;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+    transition: background .25s ease, border-color .25s ease;
+  }
+  .radio-group label .mk {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    flex-shrink: 0;
+  }
+  .radio-group label.active { background: var(--cream-2); border-color: var(--terra); }
+  .radio-group label.active .mk { background: var(--terra); border-color: var(--terra); }
+  /* chips de menu: grilla 2x2 (4 opciones no entran en una fila a 390px) */
+  .radio-group.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field-hint {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+  .char-count {
+    text-align: right;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .thanks { text-align: center; margin-top: 14px; }
+  .thanks .ok {
+    font-family: 'Birthstone', cursive;
+    font-size: 56px;
+    color: var(--terra);
+  }
+  .thanks .sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* ============================================================
+     DATOS BANCARIOS (regalos)
+     ============================================================ */
+  .bank { margin-top: 30px; border-top: 0.5px solid var(--line-strong); }
+  .bank-label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--terra-deep);
+    margin-top: 34px;
+  }
+  .bank-label + .bank { margin-top: 12px; }
+  /* aviso del buzon: centrado, entre dos lineas cortas (mismas hairlines
+     terra que usamos como divisorias en misa/fiesta). */
+  .bank-note {
+    margin-top: 42px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  .bank-note p {
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    max-width: 250px;
+  }
+  .bank-note-rule {
+    width: 46px;
+    height: 0.5px;
+    background: var(--terra);
+  }
+  .bank-row {
+    display: grid;
+    grid-template-columns: 84px 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 0.5px solid var(--line-strong);
+    align-items: baseline;
+  }
+  .bank-k {
+    font-size: 9.5px;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+  }
+  .bank-v {
+    font-family: var(--font-title);
+    font-size: 16px;
+    color: var(--ink);
+    word-break: break-all;
+  }
+  #copy-alias { margin-top: 26px; }
+
+  /* ---- botones ---- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 16px 20px;
+    margin-top: 26px;
+    /* solid por defecto: TODOS los botones con el look del de Spotify (jun 2026) */
+    background: var(--ink);
+    border: 0.5px solid var(--ink);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background .25s ease, color .25s ease;
+  }
+  /* hover: tono pastel = gold al 55% sobre el cream (mismo look que las washes) (jun 2026) */
+  .btn:hover, .btn:active { background: #d9c3a4; border-color: #d9c3a4; color: var(--ink); }
+  .btn.solid { background: var(--ink); color: var(--cream); }
+  .btn.solid:hover, .btn.solid:active { background: #d9c3a4; border-color: #d9c3a4; color: var(--ink); }
+
+  /* ============================================================
+     FOTOS (album compartido) — QR + boton
+     ============================================================ */
+  /* JUEGO JERARQUICO COMPARTIDO (fotos, playlist, confirmacion, novios,
+     regalos): primera palabra grande (62px) + segunda linea mas chica (30px).
+     Se usa sobre un .stop-title (hereda New Icon Serif). */
+  .photos-title { line-height: 1; }
+  .photos-title .photos-sumar { display: block; font-size: 62px; line-height: 0.95; }
+  .photos-title .photos-sub   { display: block; font-size: 30px; line-height: 1.05; margin-top: 2px; }
+  /* "una cancion" (playlist): tier intermedio entre "Sugeri" (62) y "para la
+     pista" (30). 42px ≈ llega hasta la "i" de "Sugeri" (ajustable). */
+  .photos-title .song-mid     { display: block; font-size: 42px; line-height: 1.02; margin-top: 2px; }
+  /* "cancion" (playlist) en la condensada de "Santino Eventos". */
+  .song-word {
+    font-family: var(--font-title);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--terra-deep);
+  }
+  /* acento en italica (playlist "para la pista", countdown "cada vez"):
+     misma serif del titulo, en italica. OJO: New Icon Serif no trae italica
+     real -> el navegador la sintetiza (oblicua). Si queda fea, cambiar a
+     Fraunces italic (la italica real del proyecto). */
+  .accent-italic { font-style: italic; }
+  /* FOTOS bloqueada hasta el dia de la boda (se marca data-fotos="locked" en
+     el <head>). display:none -> el sendero ya la excluye al medir. */
+  html[data-fotos="locked"] #fotos { display: none; }
+  .photos {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  .photos-qr {
+    width: 172px;
+    height: 172px;
+    /* sin caja: el PNG del QR tiene canal alfa (fondo transparente), asi que se
+       ve directo la textura de papel de la pagina entre los modulos (jun 2026) */
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .foot {
+    position: relative;
+    text-align: center;
+    min-height: 88svh;   /* foto final mas alta, mas cerca del hero (100svh) (jun 2026) */
+    padding: 380px 26px 90px;   /* padding arriba empuja el contenido hacia abajo; bajado 460->380 para subir el bloque de cierre (feedback novio 2026-06-20) */
+    overflow: hidden;   /* contiene la foto + su mask */
+  }
+  .foot .stop-node { top: 46px; left: 50%; transform: translateX(-50%); }
+  /* Foto FINAL DE CIERRE: espejo del header. Full-bleed detras del contenido,
+     con overlay para legibilidad y FADE DESDE ARRIBA (la foto emerge del papel
+     en el borde superior y queda solida hacia abajo) (jun 2026). */
+  .foot-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      linear-gradient(to bottom,
+        rgba(46,36,28,0.00) 0%,
+        rgba(46,36,28,0.28) 32%,
+        rgba(46,36,28,0.42) 64%,
+        rgba(46,36,28,0.52) 100%),
+      url('/assets/foto-2-footer.webp');
+    background-size: cover, cover;   /* cover: la foto llena todo el ancho/alto del footer */
+    background-position: center, center 40%;
+    background-repeat: no-repeat;
+    /* fade desde ARRIBA (inverso al header, que fundia abajo) */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 12%);
+  }
+  /* contenido del footer por encima de la foto */
+  .foot .stop-node,
+  .foot-closing, .foot-names, .foot-date, .foot-mark { position: relative; z-index: 1; }
+  /* el texto va SOBRE la foto -> sombra suave para legibilidad (como el header) */
+  .foot-closing, .foot-names, .foot-date { text-shadow: 0 1px 14px rgba(28,20,14,0.55); }
+  /* footer con las MISMAS tipografias del header (New Icon Script + Serif),
+     en vez de Birthstone. El "&" grande es el monograma; los nombres se
+     arman igual que en la portada (inicial script + resto serif mayuscula). */
+  /* frase de cierre antes del cierre con los nombres (reemplaza al "&"
+     gigante que vivia aca). Voz calida en Fraunces italic. */
+  .foot-closing {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 21px;
+    line-height: 1.3;
+    color: var(--cream);   /* claro: va sobre la foto de cierre (jun 2026) */
+    margin-top: 30px;    /* aire entre la fecha y la frase de cierre (ahora va debajo) */
+    margin-bottom: 0;
+  }
+  .foot-names {
+    margin-top: 10px;
+    line-height: 1;
+  }
+  /* nombres 50px mas arriba. Va con .reveal.in porque esa clase (animacion de
+     entrada) setea transform:none y pisaria un transform puesto en .foot-names
+     sola; este selector tiene mas especificidad y gana (jun 2026). */
+  .foot-names.reveal.in { transform: translateY(-40px); }
+  .foot-names .f-ini {
+    font-family: 'New Icon Script', cursive;
+    font-size: 55px;   /* +20% (jun 2026) */
+    color: var(--cream);   /* claro: sobre la foto de cierre (jun 2026) */
+  }
+  .foot-names .f-rest {
+    font-family: 'New Icon Serif', serif;
+    font-size: 41px;   /* +20% (jun 2026) */
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cream);   /* claro: sobre la foto de cierre (jun 2026) */
+  }
+  .foot-names .f-amp {
+    font-family: 'New Icon Script', cursive;
+    font-size: 46px;   /* +20% (jun 2026) */
+    color: rgba(255, 255, 255, 0.45);  /* blanco translucido, igual que el "&" del hero */
+  }
+  .foot-date {
+    font-family: 'New Icon Serif', serif;
+    font-size: 27px;   /* +50% (jun 2026) */
+    letter-spacing: 0.22em;
+    color: var(--cream);   /* claro: sobre la foto de cierre (jun 2026) */
+    opacity: 0.85;
+    margin-top: 22px;
+  }
+  .foot-mark {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--terra);
+    margin: 26px auto 0;
+  }
+
+  /* ============================================================
+     REVEAL al entrar en viewport
+     ============================================================ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .5s cubic-bezier(.2,.7,.2,1), transform .5s cubic-bezier(.2,.7,.2,1);
+    will-change: opacity, transform;
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    /* hero: nombres y "&" visibles y en su lugar, sin animacion */
+    .ini, .rest, .hero-amp { opacity: 1 !important; transform: none !important; }
+    .hero-amp { transform: translate(calc(-50% + 23px), -50%) !important; }
+    .stop-wash { transition: opacity .4s ease; }
+    /* hero: sin animaciones de entrada, todo visible y en su lugar */
+    .hero-eyebrow, .hero-date, .hero-scroll, .hero-scroll span {
+      animation: none !important; opacity: 1 !important;
+    }
+    .hero-date { letter-spacing: 0.16em !important; filter: none !important; }
+  }
+
+  /* ====== CAPA DE COMPARACION TIPOGRAFICA (op 1/2/3) ====== */
+  :root{ --font-title:'Source Serif 4', Georgia, serif; --font-body:'DM Sans', system-ui, sans-serif; }
+  body{ font-weight:400; }
+  .kicker, .note-k, .dress-k, .bank-k, .count-lbl,
+  #rsvp-form .field > label, #msg-form .field > label, .field label, .btn{ font-weight:600; }
+  .copy, .note-v, .bank-note p, .field-hint, .char-count{ font-weight:400; }
+  .ev-venue{ font-size:48px; }
+  .dress-elegante{ font-size:52px; }
+  .photos-title .photos-sumar{ font-size:52px; }
+  .photos-title .song-mid{ font-size:38px; }
+  html[data-op="1"]{ --font-title:'Playfair Display SC', Georgia, serif; }
+  html[data-op="1"] .ev-venue{ text-transform:none; font-size:52px; }
+  html[data-op="1"] .song-word{ text-transform:none; }
+  html[data-op="2"]{ --font-title:'Bona Nova SC', Georgia, serif; }
+  html[data-op="2"] .ev-venue{ text-transform:none; font-size:54px; }
+  html[data-op="2"] .song-word{ text-transform:none; }
+  html[data-op="3"]{ --font-title:'Source Serif 4', Georgia, serif; }
+  html[data-op="3"] .ev-venue{ font-size:40px; }
+
+  /* ====== CAMBIOS PEDIDOS POR LOS NOVIOS ====== */
+  /* RSVP: botones "Si voy / No puedo" sin color por defecto; al SELECCIONAR -> marron suave
+     (mismo tono que el hover del resto de los botones de la invitacion) */
+  .g-attendance{ gap:14px; }
+  .g-attendance label{ justify-content:center; padding:22px 12px; font-size:13px; letter-spacing:0.08em; }
+  /* POR DEFAULT: "Si, voy" en verde tenue (rampa sage) ; "No puedo" en terra-deep (mismo color que "antes del 17 de julio") */
+  .g-attendance label[data-val="yes"]{ background:rgba(139,148,113,0.12); border-color:var(--sage-50); color:var(--ink); }
+  .g-attendance label[data-val="no"]{ background:transparent; color:var(--terra-deep); border-color:var(--terra-deep); }
+  /* al seleccionar: se intensifica + anillo interno para marcar la eleccion */
+  .g-attendance label[data-val="yes"].active{ background:var(--sage-80); box-shadow:inset 0 0 0 1.5px var(--sage-50); }
+  .g-attendance label[data-val="no"].active{ background:var(--terra-95); box-shadow:inset 0 0 0 1.5px var(--terra-deep); }
+  /* PLAYLIST: logo Spotify dibujado EN EL FLUJO, centrado (igual que vestido/traje del dress code) */
+  .music-draws{ margin-top:30px; display:flex; justify-content:center; }
+  .music-draw{ display:block; height:150px; width:auto; }
+  /* SECCION "los novios de chicos": dos fotos que aparecen y convergen al scrollear */
+  .ninos-sec{ position:relative; overflow:hidden; min-height:440px; display:flex; align-items:center; justify-content:center; }
+  .nino-wrap{ position:absolute; top:50%; transform:translateY(-50%); width:24%; z-index:1; pointer-events:none; }
+  .nino-wrap.nino-izq{ left:0; }
+  .nino-wrap.nino-der{ right:0; }
+  .nino-wrap img{ display:block; width:100%; height:auto; }   /* proporcion original (no se deforma) */
+  .ninos-frase{ position:relative; z-index:2; padding:16px 6px; }
+  /* frase en Fraunces (tiene minusculas reales; las serif SC de op1/op2 solo hacen versalitas),
+     en caja normal ("Crecimos..." con mayuscula inicial) y 20% mas chica */
+  .ninos-frase .stop-title{ font-family:'Fraunces', serif; font-weight:400; font-size:24px; line-height:1.18; }
+  .ninos-frase::before{ content:""; position:absolute; inset:-16% -28%; z-index:-1;
+    background:radial-gradient(ellipse at center, var(--cream) 34%, rgba(230,223,206,0) 72%); }
+  /* ===== SECCION FRASE — variantes "Sempiterno" (?fr=def / ?fr=solo) =====
+     La frase de "los novios de chicos" se reemplaza por la palabra elegida por
+     los novios. Dos formas, seleccionables desde la URL:
+       fr=def  -> palabra + categoria gramatical + definicion breve
+       fr=solo -> solo la palabra
+     Sin ?fr= queda el placeholder original (los links op=1/2/3 no cambian). */
+  .frase-semp{ display:none; }
+  html[data-fr="def"]    .frase-default,
+  html[data-fr="solo"]   .frase-default,
+  html[data-fr="plural"] .frase-default{ display:none; }
+  html[data-fr="def"]    .frase-def{ display:block; }
+  html[data-fr="solo"]   .frase-solo{ display:block; }
+  html[data-fr="plural"] .frase-plural{ display:block; }
+  /* la palabra: protagonista, en la serif de titulos de la opcion (Bona Nova en op2) */
+  .semp-word{
+    font-family:var(--font-title); font-weight:400;
+    font-size:34px; line-height:1; letter-spacing:0.015em;
+    color:var(--ink); white-space:nowrap;
+  }
+  /* categoria gramatical: voz cursiva editorial (Fraunces italic) */
+  .semp-pos{
+    font-family:'Fraunces', serif; font-style:italic;
+    font-size:16px; color:var(--terra-deep); margin-top:8px;
+  }
+  /* definicion breve */
+  .semp-def{
+    font-family:'Fraunces', serif; font-style:italic;
+    font-size:15px; line-height:1.5; color:var(--ink-soft);
+    margin-top:16px;
+  }
+  /* HEADER op2/op3: foto vertical (bici) en vez de la del vinedo */
+  html[data-op="2"] .hero-media, html[data-op="3"] .hero-media{
+    background-image:
+      linear-gradient(to bottom, rgba(46,36,28,0.30) 0%, rgba(46,36,28,0.30) 24%, rgba(46,36,28,0.50) 46%, rgba(46,36,28,0.60) 68%, rgba(46,36,28,0.56) 86%, rgba(46,36,28,0.00) 100%),
+      url('/assets/noviosheader-bici.webp');
+    background-size: cover, cover;
+    background-position: center, center 22%;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <!-- ============ EL SENDERO (enredadera continua) ============
+       trailGhost: guia hairline siempre visible (vara de la enredadera).
+       trailPath:  tallo sage que se "dibuja" con el scroll encima del ghost.
+       trailLeaves: hojitas distribuidas a lo largo del path; el JS las
+       inserta con <use href="#leaf-X"> y las muestra a medida que el dibujo
+       las "alcanza". Cuatro variantes en <defs> + un brote de puntitos. -->
+  <svg class="trail" id="trail" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- FILTERS WATERCOLOR para el tallo:
+           - watercolorStroke: turbulence + displacement fuerte → bordes
+             "feathered" + un blur sutil para suavizar el resultado.
+           - watercolorStrokeFine: misma idea pero mas sutil, para el path
+             overlay de la "vena central" (variacion tonal).  -->
+      <filter id="watercolorStroke" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.045 0.045" seed="7" numOctaves="2" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+        <feGaussianBlur in="rough" stdDeviation="0.35"/>
+      </filter>
+      <filter id="watercolorStrokeFine" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.08 0.08" seed="2" numOctaves="2" result="noise2"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise2" scale="2" xChannelSelector="R" yChannelSelector="G" result="rough2"/>
+        <feGaussianBlur in="rough2" stdDeviation="0.25"/>
+      </filter>
+
+      <!-- hoja almendra (sage, hoja base) -->
+      <g id="leaf-a">
+        <path d="M0,-14 C7,-8 7,8 0,14 C-7,8 -7,-8 0,-14 Z" fill="var(--sage)" opacity="0.55"/>
+        <path d="M0,-12 C4,-6 4,6 0,12" fill="none" stroke="var(--sage)" stroke-width="0.6" opacity="0.5"/>
+      </g>
+      <!-- hoja almendra fina (sage oscuro, version delgada) -->
+      <g id="leaf-b">
+        <path d="M0,-16 C5,-9 5,9 0,16 C-5,9 -5,-9 0,-16 Z" fill="var(--sage-40)" opacity="0.7"/>
+      </g>
+      <!-- hoja doble: dos hojitas espejadas en V -->
+      <g id="leaf-c">
+        <path d="M0,0 C-3,-3 -8,-5 -11,-4 C-9,-1 -4,2 0,0 Z" fill="var(--sage)" opacity="0.55"/>
+        <path d="M0,0 C3,-3 8,-5 11,-4 C9,-1 4,2 0,0 Z" fill="var(--sage)" opacity="0.55"/>
+      </g>
+      <!-- brote: cluster de 3 puntitos (gold/terra) como floracion -->
+      <g id="leaf-d">
+        <circle cx="0"  cy="-3" r="1.6" fill="var(--gold)"  opacity="0.7"/>
+        <circle cx="-3" cy="2"  r="1.6" fill="var(--terra)" opacity="0.55"/>
+        <circle cx="3"  cy="2"  r="1.6" fill="var(--gold)"  opacity="0.7"/>
+      </g>
+    </defs>
+    <path id="trailGhost" class="trail-ghost"></path>
+    <path id="trailPath"  class="trail-ink"></path>
+    <path id="trailShade" class="trail-ink-shade"></path>
+    <g id="trailLeaves"></g>
+    <g id="trailPen" class="trail-pen">
+      <circle class="petal" cx="0"     cy="-2.9" r="2.5"></circle>
+      <circle class="petal" cx="2.9"   cy="0"    r="2.5"></circle>
+      <circle class="petal" cx="0"     cy="2.9"  r="2.5"></circle>
+      <circle class="petal" cx="-2.9"  cy="0"    r="2.5"></circle>
+      <circle class="pollen" cx="0" cy="0" r="2"></circle>
+    </g>
+  </svg>
+
+  <div class="sendero">
+
+    <!-- ============ HERO ============ -->
+    <header class="hero" data-side="center">
+      <span class="stop-node" data-node></span>
+      <!-- Foto de fondo del hero (arco arriba + fade abajo); el texto va encima. -->
+      <div class="hero-media" aria-hidden="true"></div>
+      <div class="hero-eyebrow">
+        <svg class="eyebrow-arc" viewBox="0 0 280 112" aria-label="Nos casamos">
+          <path id="eyebrowArc" d="M 22 104 A 130 130 0 0 1 258 104" fill="none"></path>
+          <text><textPath href="#eyebrowArc" startOffset="50%" text-anchor="middle">Nos casamos</textPath></text>
+        </svg>
+      </div>
+      <h1 class="hero-names">
+        <span class="name-group">
+          <span class="name-row"><span class="ini">A</span><span class="rest">gus</span></span>
+        </span>
+        <span class="hero-amp">&amp;</span>
+        <span class="name-group">
+          <span class="name-row"><span class="ini">S</span><span class="rest">anti</span></span>
+        </span>
+      </h1>
+      <div class="hero-meta">
+        <p class="hero-date">01 · 08 · 2026</p>
+      </div>
+      <!-- "Segui el sendero" eliminado para la presentacion con el cliente (jun 2026).
+           Para REACTIVAR: descomentar el bloque de abajo.
+      <div class="hero-scroll">
+        <span>Seguí el sendero</span>
+      </div>
+      -->
+    </header>
+
+    <!-- ============ i · LA FECHA (fusion: fecha + cuenta regresiva) ============ -->
+    <section class="stop stop-deco-top" data-side="center">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <!-- decoracion floral superior (arco eucalipto + flor terra) -->
+      <!-- FLOR DESACTIVADA para la presentacion con el cliente (jun 2026).
+           Para REACTIVAR: descomentar la linea de abajo.
+      <img class="stop-flora stop-flora-top" src="/assets/flores/composicion-4.jpg" alt="">
+      -->
+      <div class="stop-body">
+        <h2 class="stop-title reveal">Falta <span class="accent-italic">cada<br/>vez</span> menos</h2>
+        <p class="big-date reveal" aria-label="01 de agosto de 2026">01 · 08 · 26</p>
+        <div class="count reveal" id="countdown">
+          <div class="count-cell"><span class="count-num" data-cd="days">—</span><span class="count-lbl">Días</span></div>
+          <div class="count-cell"><span class="count-num" data-cd="hours">—</span><span class="count-lbl">Horas</span></div>
+          <div class="count-cell"><span class="count-num" data-cd="mins">—</span><span class="count-lbl">Min</span></div>
+          <div class="count-cell"><span class="count-num" data-cd="secs">—</span><span class="count-lbl">Seg</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ii · LA MISA ============ -->
+    <section class="stop" data-side="left" id="misa">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <img class="misa-draw" src="/assets/draws/iglesia-misa.webp" alt="Ilustración de la iglesia" aria-hidden="true">
+      <div class="stop-body">
+        <p class="kicker reveal">La misa</p>
+        <p class="ev-venue reveal" style="color: var(--ink);">Nuestra<br/>Señora<br/>del Valle</p>
+        <p class="ev-address reveal">Florida Sur 251, Yerba Buena</p>
+        <span class="ev-divider reveal"></span>
+        <p class="ev-hour reveal">16:30 hs</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Parroquia+Nuestra+Se%C3%B1ora+del+Valle%2C+Florida+Sur+251%2C+Yerba+Buena" target="_blank" rel="noopener" class="btn reveal">Cómo llegar a la iglesia</a>
+      </div>
+    </section>
+
+    <!-- ============ iii · LA FIESTA ============ -->
+    <section class="stop" data-side="left" id="fiesta">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <img class="fiesta-draw" src="/assets/draws/fiesta-draw.webp" alt="Ilustración de copas brindando" aria-hidden="true">
+      <div class="stop-body">
+        <p class="kicker reveal">La fiesta</p>
+        <p class="ev-venue reveal" style="color: var(--ink);">Santino<br/>Eventos</p>
+        <p class="ev-address reveal">Av. Camino del Perú 1052</p>
+        <span class="ev-divider reveal"></span>
+        <p class="ev-hour reveal">18:00 hs</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Santino+Eventos%2C+Av.+Camino+del+Per%C3%BA+1052" target="_blank" rel="noopener" class="btn reveal">Cómo llegar al salón</a>
+      </div>
+    </section>
+
+    <!-- ============ iv · DRESSCODE ============ -->
+    <section class="stop" data-side="left" style="padding-bottom: 32px;">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <div class="stop-body">
+        <p class="kicker reveal">Dress code</p>
+        <h2 class="dress-elegante reveal">Elegante</h2>
+        <p class="copy reveal">El blanco y tonos similares son exclusivos<br/>para la novia.</p>
+        <!-- dibujos line-art: saco (arriba) + vestido (abajo) -->
+        <div class="dress-draws reveal">
+          <img class="dress-draw" src="/assets/draws/saco-novio.webp" alt="Ilustración del saco del novio">
+          <img class="dress-draw" src="/assets/draws/vestido-novia.webp" alt="Ilustración del vestido de la novia">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ iv.b · LOS NOVIOS DE CHICOS ============ -->
+    <section class="stop ninos-sec" data-side="center" id="ninos">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <div class="nino-wrap nino-izq"><img src="/assets/ninos/nino.webp" alt="Uno de los novios, de pequeño" aria-hidden="true"></div>
+      <div class="nino-wrap nino-der"><img src="/assets/ninos/nina.webp" alt="La otra de los novios, de pequeña" aria-hidden="true"></div>
+      <div class="stop-body ninos-frase">
+        <!-- placeholder original: se ve solo si NO hay ?fr= (no rompe op=1/2/3) -->
+        <h2 class="stop-title reveal frase-default">Acá iría una frase<br/><span class="accent-italic">que quieran ustedes</span></h2>
+        <!-- variante A (?fr=def): la palabra + categoria + definicion breve -->
+        <div class="frase-semp frase-def">
+          <h2 class="semp-word reveal">Sempiterno</h2>
+          <p class="semp-def reveal">Que durará siempre; que, habiendo tenido<br/>principio, no tendrá fin.</p>
+        </div>
+        <!-- variante B (?fr=solo): solo la palabra -->
+        <div class="frase-semp frase-solo">
+          <h2 class="semp-word reveal">Sempiterno</h2>
+        </div>
+        <!-- variante C (?fr=plural): en plural, sobre ellos + definicion corta -->
+        <div class="frase-semp frase-plural">
+          <h2 class="semp-word reveal">Sempiternos</h2>
+          <p class="semp-def reveal">Destinados a no tener fin.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONFIRMACIÓN ============ -->
+    <section class="stop" data-side="left">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <div class="stop-body">
+        <p class="kicker reveal">Confirmación</p>
+        <div class="reveal">
+          <h2 class="stop-title photos-title">
+            <span class="photos-sumar">Confirmá</span>
+            <span class="photos-sub">tu presencia</span>
+          </h2>
+          <div class="rsvp-deadline">antes del 17 de julio</div>
+        </div>
+
+        <form id="rsvp-form" class="rsvp-form reveal" novalidate>
+          <!-- Bloque por invitado. El 2º (data-guest="2") y las etiquetas
+               "Invitado N" solo se ven con html[data-inv="2"] (link /dos). -->
+          <div class="guest" data-guest="1">
+            <p class="guest-label">Invitado 1</p>
+            <div class="field">
+              <label for="name-1">Nombre completo</label>
+              <input id="name-1" class="g-name" type="text" placeholder="Tu nombre" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label>¿Vas a venir?</label>
+              <div class="radio-group g-attendance">
+                <label data-val="yes">Sí, voy</label>
+                <label data-val="no">No puedo</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Preferencia de menú</label>
+              <div class="radio-group chips g-menu">
+                <label data-val="vegano"><span class="mk"></span>Vegano</label>
+                <label data-val="vegetariano"><span class="mk"></span>Vegetariano</label>
+                <label data-val="celiaco"><span class="mk"></span>Celíaco</label>
+                <label data-val="diabetico"><span class="mk"></span>Diabético</label>
+              </div>
+              <p class="field-hint">Si no marcás nada, va el menú estándar.</p>
+            </div>
+            <div class="field">
+              <label for="allergies-1">Alergias</label>
+              <input id="allergies-1" class="g-allergies" type="text" placeholder="Contanos si tenés alguna" />
+            </div>
+          </div>
+
+          <div class="guest" data-guest="2">
+            <p class="guest-label">Invitado 2</p>
+            <div class="field">
+              <label for="name-2">Nombre completo</label>
+              <input id="name-2" class="g-name" type="text" placeholder="Nombre del segundo invitado" autocomplete="name" />
+            </div>
+            <div class="field">
+              <label>¿Vas a venir?</label>
+              <div class="radio-group g-attendance">
+                <label data-val="yes">Sí, voy</label>
+                <label data-val="no">No puedo</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Preferencia de menú</label>
+              <div class="radio-group chips g-menu">
+                <label data-val="vegano"><span class="mk"></span>Vegano</label>
+                <label data-val="vegetariano"><span class="mk"></span>Vegetariano</label>
+                <label data-val="celiaco"><span class="mk"></span>Celíaco</label>
+                <label data-val="diabetico"><span class="mk"></span>Diabético</label>
+              </div>
+              <p class="field-hint">Si no marcás nada, va el menú estándar.</p>
+            </div>
+            <div class="field">
+              <label for="allergies-2">Alergias</label>
+              <input id="allergies-2" class="g-allergies" type="text" placeholder="Contanos si tenés alguna" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn solid" style="margin-top:8px;">Enviar confirmación</button>
+        </form>
+
+        <div id="thanks" class="thanks" style="display:none;">
+          <div class="ok">¡Gracias!</div>
+          <div class="sub">Nos vemos el 01 de agosto.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PARA LOS NOVIOS ============ -->
+    <section class="stop" data-side="left">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <div class="stop-body">
+        <p class="kicker reveal">Para los novios</p>
+        <h2 class="stop-title reveal photos-title">
+          <span class="photos-sumar">Dejanos</span>
+          <span class="photos-sub">un mensaje</span>
+        </h2>
+        <p class="stop-lead reveal">Opcional. Un saludo, una anécdota, lo que tengas ganas de contarnos.</p>
+        <form id="msg-form" class="rsvp-form reveal" novalidate>
+          <div class="field">
+            <label for="msg-name">De parte de</label>
+            <input id="msg-name" type="text" placeholder="Tu nombre" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="msg-body">Mensaje</label>
+            <textarea id="msg-body" rows="4" maxlength="300" placeholder="Escribilo acá"></textarea>
+            <div class="char-count"><span id="char-msg">0</span> / 300</div>
+          </div>
+          <button type="submit" class="btn solid" style="margin-top:8px;">Enviar mensaje</button>
+        </form>
+        <div id="msg-thanks" class="thanks" style="display:none;">
+          <div class="ok">¡Gracias!</div>
+          <div class="sub">Llega derechito a los novios.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DATOS BANCARIOS (regalos) ============ -->
+    <section class="stop" data-side="left">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <div class="stop-body">
+        <p class="kicker reveal">Regalos</p>
+        <h2 class="stop-title reveal photos-title">
+          <span class="photos-sumar">Si querés</span>
+          <span class="photos-sub">hacernos un regalo</span>
+        </h2>
+        <p class="stop-lead reveal">Tu presencia ya es el mejor regalo. Si igual querés sumar, acá están los datos.</p>
+
+        <p class="bank-label reveal">En pesos</p>
+        <div class="bank reveal">
+          <div class="bank-row">
+            <div class="bank-k">Titular</div>
+            <div class="bank-v">Agustina Martinez Riera</div>
+          </div>
+          <div class="bank-row">
+            <div class="bank-k">Alias</div>
+            <div class="bank-v">agusysanti.pesos</div>
+          </div>
+          <div class="bank-row">
+            <div class="bank-k">CBU</div>
+            <div class="bank-v">0000003100004274662889</div>
+          </div>
+          <div class="bank-row">
+            <div class="bank-k">Banco</div>
+            <div class="bank-v">Mercado Pago</div>
+          </div>
+        </div>
+        <button type="button" class="btn reveal" onclick="if(navigator.clipboard){navigator.clipboard.writeText('agusysanti.pesos');} this.textContent='Copiado'; setTimeout(()=>{this.textContent='Copiar alias en pesos';}, 1800);">Copiar alias en pesos</button>
+
+        <p class="bank-label reveal">En dólares</p>
+        <div class="bank reveal">
+          <div class="bank-row">
+            <div class="bank-k">Titular</div>
+            <div class="bank-v">Agustina Martinez Riera</div>
+          </div>
+          <div class="bank-row">
+            <div class="bank-k">Alias</div>
+            <div class="bank-v">agusysanti.usd</div>
+          </div>
+          <div class="bank-row">
+            <div class="bank-k">CBU</div>
+            <div class="bank-v">0070089431004181900328</div>
+          </div>
+          <div class="bank-row">
+            <div class="bank-k">Banco</div>
+            <div class="bank-v">Galicia</div>
+          </div>
+        </div>
+        <button type="button" class="btn reveal" onclick="if(navigator.clipboard){navigator.clipboard.writeText('agusysanti.usd');} this.textContent='Copiado'; setTimeout(()=>{this.textContent='Copiar alias en dólares';}, 1800);">Copiar alias en dólares</button>
+
+        <div class="bank-note reveal">
+          <span class="bank-note-rule"></span>
+          <p>También vas a encontrar un buzón en el salón, por si preferís acercarnos un sobre el día de la fiesta.</p>
+          <span class="bank-note-rule"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PLAYLIST ============ -->
+    <section class="stop" data-side="left" id="playlist">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <div class="stop-body">
+        <p class="kicker reveal">Playlist</p>
+        <h2 class="stop-title reveal photos-title">
+          <span class="photos-sumar">Sugerí</span>
+          <span class="song-mid">una <span class="song-word">canción</span></span>
+          <span class="photos-sub accent-italic">para la fiesta</span>
+        </h2>
+        <p class="copy reveal">Sumá el tema que no puede faltar. La playlist la hacemos entre todos.</p>
+        <div class="music-draws reveal"><img class="music-draw" src="/assets/draws/spotify-draw.webp" alt="Logo de Spotify dibujado"></div>
+        <form id="song-form" class="rsvp-form reveal" novalidate>
+          <div class="field">
+            <label for="song-input">La canción</label>
+            <input id="song-input" type="text" maxlength="120" placeholder="Tema y artista" autocomplete="off" />
+          </div>
+          <button type="submit" class="btn solid" style="margin-top:8px;">Sugerir canción</button>
+        </form>
+        <div id="song-thanks" class="thanks" style="display:none;">
+          <div class="ok">¡Anotada!</div>
+          <div class="sub">Va para la playlist de la fiesta.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ vi · FOTOS ============ -->
+    <section class="stop" data-side="left" id="fotos">
+      <span class="stop-node" data-node></span>
+      <span class="stop-wash wash-gold"></span>
+      <div class="stop-body">
+        <p class="kicker reveal">Fotos</p>
+        <h2 class="stop-title reveal photos-title">
+          <span class="photos-sumar">Sumá</span>
+          <span class="photos-sub">tus fotos</span>
+        </h2>
+        <p class="stop-lead reveal">Sacá fotos durante la fiesta y subilas al álbum compartido. Escaneá el código en el salón o entrá desde el link.</p>
+        <div class="photos reveal">
+          <img id="photos-qr" class="photos-qr" alt="Código QR para subir fotos" src="">
+        </div>
+        <a id="photos-link" href="#" target="_blank" rel="noopener" class="btn solid reveal">Abrir el álbum</a>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="foot" data-side="center">
+      <span class="stop-node" data-node></span>
+      <!-- Foto final de cierre (fade desde arriba; el texto va encima). -->
+      <div class="foot-media" aria-hidden="true"></div>
+      <div class="foot-names reveal"><span class="f-ini">A</span><span class="f-rest">gus</span> <span class="f-amp">&amp;</span> <span class="f-ini">S</span><span class="f-rest">anti</span></div>
+      <div class="foot-date reveal">01 · 08 · 2026</div>
+      <p class="foot-closing reveal">Nos vemos en el gran día</p>
+      <div class="foot-mark reveal"></div>
+    </footer>
+
+  </div><!-- /.sendero -->
+</div><!-- /.stage -->
+
+<!-- GSAP (libreria de animaciones) + plugin ScrollTrigger, via CDN.
+     Quedan disponibles como window.gsap y window.ScrollTrigger.
+     Agregado jun 2026. Si algun dia se quiere fijar la version, cambiar 3.12.5. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 1. Reveal al entrar en viewport ---------- */
+  // Barrido por scroll (no IntersectionObserver). Motivo: con un scroll MUY
+  // rapido (fling o salto de barra) el IO no alcanza a muestrear los elementos
+  // que pasan volando -> quedaban invisibles a medio cargar. El barrido, en
+  // cambio, recorre TODOS los .reveal en cada frame de scroll y prende los que
+  // ya entraron o pasaron; hasta un salto instantaneo dispara un scroll en el
+  // destino que barre todo lo de arriba. Sticky: solo prende, nunca apaga.
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  var pending = reveals.slice();
+  var ticking = false;
+  function sweep() {
+    ticking = false;
+    // prende apenas el borde superior entra al viewport. Usar innerHeight (y no
+    // un % menor) garantiza que el ultimo elemento al pie de pagina tambien
+    // revele: al tope del scroll no hay margen para esperar a que "suba mas".
+    var trigger = window.innerHeight;
+    var still = [];
+    for (var i = 0; i < pending.length; i++) {
+      var el = pending[i];
+      if (el.getBoundingClientRect().top < trigger) el.classList.add('in');
+      else still.push(el); // todavia abajo del trigger -> seguir vigilando
+    }
+    pending = still;
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(sweep); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  sweep(); // estado inicial: revelar lo que ya esta en pantalla al cargar
+
+  // stagger dentro de cada parada. Si la seccion tiene kicker (nombre), la
+  // secuencia es: nombre (0ms) -> linea del kicker (~0.3s, via CSS ::after)
+  // -> resto del contenido (espera un "base" para entrar DESPUES de la linea).
+  document.querySelectorAll('.stop, .hero, .foot').forEach(function (sec) {
+    var hasKicker = !!sec.querySelector('.kicker.reveal');
+    var base = hasKicker ? 160 : 0;
+    var n = 0;
+    sec.querySelectorAll('.reveal').forEach(function (el) {
+      if (el.classList.contains('kicker')) {
+        el.style.transitionDelay = '0ms';
+      } else {
+        // cap del stagger: nunca mas de ~340ms de espera, asi en un scroll
+        // rapido los ultimos items de la seccion igual alcanzan a entrar.
+        el.style.transitionDelay = Math.min(base + n * 45, 340) + 'ms';
+        n++;
+      }
+    });
+  });
+
+  // washes de acuarela
+  var washIo = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) e.target.classList.add('in');
+      else e.target.classList.remove('in');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.stop-wash').forEach(function (w) { washIo.observe(w); });
+
+  /* ---------- 2. Hero: entrada de "Agus & Santi" (fundido escalonado) -------
+     Cada nombre (inicial + resto) entra con un fundido + leve subida, primero
+     Agus y despues Santi; el "&" entra al final. NO esperamos 'load' (la foto
+     pesa): corre con el DOM listo, asi se sincroniza con "Nos casamos". */
+  var heroNames = document.querySelector('.hero-names');
+  if (!reduce && heroNames) {
+    var amp = heroNames.querySelector('.hero-amp');
+    var ng  = heroNames.querySelectorAll('.name-group');
+    var agusEls  = ng[0] ? ng[0].querySelectorAll('.ini, .rest') : [];
+    var santiEls = ng[1] ? ng[1].querySelectorAll('.ini, .rest') : [];
+
+    if (window.gsap) {
+      // --- Entrada con GSAP: una sola timeline, easing suave y un unico reloj
+      //     (rAF). Cada inicial (.ini) hace WRITE-ON ("tinta que entra": la
+      //     letra real se revela con un barrido), y despues el resto del nombre
+      //     (.rest) sube con fundido. Orden: Agus -> & -> Santi. El "&" conserva
+      //     su posicion (centrado + nudge optico 23px) via xPercent/yPercent/x. ---
+      var agusIni  = ng[0].querySelector('.ini'),  agusRest  = ng[0].querySelector('.rest');
+      var santiIni = ng[1].querySelector('.ini'),  santiRest = ng[1].querySelector('.rest');
+
+      // Estado oculto YA (sincrono, antes de pintar) -> nada de flash.
+      // Iniciales: visibles pero tapadas por la mascara de tinta (--ink:100).
+      [agusIni, santiIni].forEach(function (el) { el.classList.add('inking'); });
+      gsap.set([agusIni, santiIni], { opacity: 1, y: 0 });
+      agusIni.style.setProperty('--ink', 100);
+      santiIni.style.setProperty('--ink', 100);
+      gsap.set([agusRest, santiRest], { opacity: 0, y: 14 });
+      gsap.set(amp, { xPercent: -50, yPercent: -50, x: 23, opacity: 0, scale: 0.9 });
+
+      // La timeline ARRANCA recien cuando la fuente real (New Icon Script/Serif)
+      // termino de cargar: asi los nombres jamas se dibujan con la fuente de
+      // respaldo (el "Comic Sans" del generico cursive).
+      var started = false;
+      function ink(el) {
+        // proxy bulletproof: anima un objeto y escribe --ink cada frame (no
+        // depende de que GSAP sepa interpolar la CSS var directamente).
+        return { v: 100, _el: el };
+      }
+      function playNames() {
+        if (started) return; started = true;
+        var aInk = ink(agusIni), sInk = ink(santiIni);
+        var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        // Agus: la "A" entinta -> "gus" sube
+        tl.to(aInk, { v: 0, duration: 0.65, ease: 'power1.inOut',
+              onUpdate: function () { agusIni.style.setProperty('--ink', aInk.v); } }, 0.35)
+          .to(agusRest, { opacity: 1, y: 0, duration: 0.5 }, 0.78)
+        // "&"
+          .to(amp, { opacity: 1, scale: 1, duration: 0.7 }, 1.18)
+        // Santi: la "S" entinta -> "anti" sube
+          .to(sInk, { v: 0, duration: 0.65, ease: 'power1.inOut',
+              onUpdate: function () { santiIni.style.setProperty('--ink', sInk.v); } }, 1.5)
+          .to(santiRest, { opacity: 1, y: 0, duration: 0.5 }, 1.93);
+      }
+      // __SHOOT: el script de captura (shoot-hero.cjs) setea este flag para
+      // tomar control y evitar que la timeline de la pagina corra en paralelo.
+      if (!window.__SHOOT) {
+        if (document.fonts && document.fonts.load) {
+          Promise.all([
+            document.fonts.load('93px "New Icon Script"'),
+            document.fonts.load('75px "New Icon Serif"')
+          ]).then(playNames).catch(playNames);
+          setTimeout(playNames, 1200);  // red de seguridad si fonts.load cuelga
+        } else {
+          playNames();
+        }
+      }
+    } else {
+      // --- Fallback sin GSAP (CDN caido): la version CSS por clases. ---
+      heroNames.classList.add('anim');  // oculta nombres y "&" para la entrada
+      Array.prototype.slice.call(ng).forEach(function (g, i) {
+        setTimeout(function () {
+          g.querySelectorAll('.ini, .rest').forEach(function (el) { el.classList.add('show'); });
+        }, 650 + i * 500);  // Agus, luego Santi
+      });
+      setTimeout(function () { heroNames.classList.add('amp-in'); }, 1750);
+    }
+  }
+
+  /* ---------- 3. El sendero: trail generativo + atado al scroll ---------- */
+  var stage   = document.getElementById('stage');
+  var svg     = document.getElementById('trail');
+  var path    = document.getElementById('trailPath');
+  var shade   = document.getElementById('trailShade');
+  var ghost   = document.getElementById('trailGhost');
+  var pen     = document.getElementById('trailPen');
+  var sendero = document.querySelector('.sendero');
+  var nodes   = Array.prototype.slice.call(document.querySelectorAll('[data-node]'));
+  var trailLen = 0;
+  var sendero  = document.querySelector('.sendero');
+  var trailLeaves = []; // { el, atLen }
+  // Set de piezas watercolor SIN FONDO (PNG transparente) para distribuir
+  // a lo largo del sendero. Cada entrada: src del PNG y ancho base en px.
+  var leafTypes = {
+    a: { src: '/assets/sendero/sage-stem-1.png',    w: 70 },
+    b: { src: '/assets/sendero/sage-stem-2.png',    w: 75 },
+    c: { src: '/assets/sendero/sage-leaves-1.png',  w: 65 },
+    d: { src: '/assets/sendero/sage-leaves-2.png',  w: 70 },
+    e: { src: '/assets/sendero/eucalipto-1.png',    w: 60 },
+    g: { src: '/assets/sendero/gold-cluster-1.png', w: 80 }, // brote dorado
+    p: { src: '/assets/sendero/peach-flower-1.png', w: 60 },
+    q: { src: '/assets/sendero/peach-flower-2.png', w: 60 },
+    // NOTA: los capullos terracota (antes 't') se sacaron (jun 2026): el PNG
+    // fuente estaba roto (24-bit sin alfa). Si se quieren, regenerar primero.
+  };
+  // Segmento del tallo watercolor (distribuido a lo largo del path)
+  var stemSegment = '/assets/sendero/tallo/segment-opt.png';  // PERF: brillo/desat/blur/fade horneados (jun 2026)
+  var trailStems  = []; // { el, atLen }
+
+  // TALLO WATERCOLOR: distribuye segmentos del PNG del tallo a lo largo del
+  // path SVG, cada uno rotado a la tangente. Crea ilusion de tallo continuo.
+  function buildTrailStems() {
+    trailStems.forEach(function (s) { if (s.el.parentNode) s.el.parentNode.removeChild(s.el); });
+    trailStems = [];
+    if (!trailLen || !sendero) return;
+    var segH    = 26;
+    var segW    = 14;
+    var stride  = 14;  // PERF (jun 2026): 6->14, ~2.4x menos tallos. El segmento
+                       // mide 26px de alto y el fade horneado se solapa, asi que
+                       // a 14px la linea sigue continua sin huecos visibles.
+    for (var L = 0; L < trailLen; L += stride) {
+      var p   = path.getPointAtLength(L);
+      var p2  = path.getPointAtLength(Math.min(L + 1.5, trailLen));
+      var ang = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
+      var img = document.createElement('img');
+      img.src = stemSegment;
+      img.alt = '';
+      img.className = 'trail-stem';
+      img.style.left   = (p.x - segW / 2) + 'px';
+      img.style.top    = (p.y - segH / 2) + 'px';
+      img.style.width  = segW + 'px';
+      img.style.height = segH + 'px';
+      img.style.transform = 'rotate(' + (ang - 90).toFixed(1) + 'deg)';
+      sendero.appendChild(img);
+      trailStems.push({ el: img, atLen: L });
+    }
+  }
+
+  // ENREDADERA: distribuye PIEZAS WATERCOLOR (PNG transparente) a lo largo
+  // del path. HTML <img> absolute-positioned en .sendero. Cada pieza rota
+  // perpendicular al tallo y se alterna a izq/der.
+  function buildTrailLeaves() {
+    // limpiar copias previas
+    trailLeaves.forEach(function (lf) { if (lf.el.parentNode) lf.el.parentNode.removeChild(lf.el); });
+    trailLeaves = [];
+    // HOJAS DESACTIVADAS para la presentacion con el cliente (jun 2026).
+    // Quita el limpiado deja el sendero solo con el tallo, sin hojas/flores.
+    // Para REACTIVAR: borrar este return. El sembrado original sigue intacto abajo.
+    return;
+    if (!trailLen || !sendero) return;
+    // Sembrado automatico de hojas/flores RE-ACTIVADO (jun 2026): el sendero
+    // se veia "pelado" (solo tallo) porque esto estaba apagado con un return.
+    var step    = 95;             // distancia entre piezas (mas grande que con SVG porque ahora son mas grandes)
+    var jitter  = 18;             // ruido en posicion
+    var seed    = 11;
+    function rand() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+    // patron: sage es la mayoria; gold-cluster cada 4-5; peach/terra como
+    // acentos esporadicos. Variar tipo Y tamano da feeling organico.
+    var types = ['a','c','b','g','d','a','b','c','p','a','e','d','a','q','c','g','b','a'];
+    var k = 0;
+    for (var L = 50; L < trailLen - 40; L += step + (rand() - 0.5) * jitter) {
+      var atLen = L;
+      var p     = path.getPointAtLength(atLen);
+      var p2    = path.getPointAtLength(Math.min(atLen + 1.2, trailLen));
+      var ang   = Math.atan2(p2.y - p.y, p2.x - p.x) * 180 / Math.PI;
+      var typeKey = types[k % types.length];
+      var t       = leafTypes[typeKey];
+      var side    = (k % 2 === 0) ? 1 : -1;
+      // tamano: pequena variacion (+- 25%) sobre el ancho base del tipo
+      var w     = t.w * (0.78 + rand() * 0.44);
+      var h     = w;  // todas las imagenes son cuadradas
+      // posicion: la imagen se ancla con su CENTRO en (cx, cy), perpendicular
+      // al path. Offset adicional para que "brote" del tallo en lugar de
+      // taparlo.
+      var perp  = (ang + 90) * Math.PI / 180;
+      var offset = w * 0.35;
+      var cx    = p.x + Math.cos(perp) * offset * side;
+      var cy    = p.y + Math.sin(perp) * offset * side;
+      // rotacion: como las piezas ya estan pintadas con stem hacia abajo,
+      // las rotamos al angulo del path + un pequeno giro segun lado para
+      // que el stem natural de la imagen "siga" el tallo del sendero.
+      var rot   = ang - 90 + (side > 0 ? 18 : -18) + (rand() - 0.5) * 16;
+      // si el lado es izquierdo, espejamos la imagen horizontalmente para
+      // que las composiciones (que vienen con la planta hacia un lado fijo)
+      // alternen orientacion organicamente.
+      var flipX = (side < 0) ? -1 : 1;
+
+      var img = document.createElement('img');
+      img.src = t.src;
+      img.alt = '';
+      img.className = 'trail-leaf';
+      img.style.left   = (cx - w / 2) + 'px';
+      img.style.top    = (cy - h / 2) + 'px';
+      img.style.width  = w + 'px';
+      img.style.height = h + 'px';
+      img.style.transform =
+        'rotate(' + rot.toFixed(1) + 'deg) ' +
+        'scaleX(' + flipX + ')';
+      sendero.appendChild(img);
+      trailLeaves.push({ el: img, atLen: atLen });
+      k++;
+    }
+  }
+
+  function updateTrailLeaves(drawn) {
+    // Si todavia no se hizo scroll real (drawn <= 0), ningun stem
+    // ni hoja se muestra: el sendero arranca invisible y aparece con
+    // el primer scroll.
+    var allHidden = drawn <= 0;
+    var biasLeaf = 12;
+    for (var i = 0; i < trailLeaves.length; i++) {
+      var lf = trailLeaves[i];
+      var shown = !allHidden && drawn > lf.atLen + biasLeaf;
+      if (shown && !lf.el.classList.contains('in')) lf.el.classList.add('in');
+      else if (!shown && lf.el.classList.contains('in')) lf.el.classList.remove('in');
+    }
+    var biasStem = -4;
+    for (var j = 0; j < trailStems.length; j++) {
+      var st = trailStems[j];
+      var sh = !allHidden && drawn > st.atLen + biasStem;
+      if (sh && !st.el.classList.contains('in')) st.el.classList.add('in');
+      else if (!sh && st.el.classList.contains('in')) st.el.classList.remove('in');
+    }
+  }
+
+  // La hairline del kicker de cada parada se "enciende" cuando el nodo entra
+  // al 60% del viewport (mismo principio que .reveal). Reemplaza al circulito
+  // blanco como marca visual de la seccion. Se enciende al entrar y se apaga
+  // al salir (toggle) para que la animacion se reinicie cada vez. Esta logica
+  // se hace con IntersectionObserver, no con pathLength, porque
+  // drawn-vs-pathLength se desincroniza con la Y real del viewport.
+  function setupKickerObserver() {
+    if (!('IntersectionObserver' in window)) {
+      // fallback: encender todas
+      document.querySelectorAll('.kicker').forEach(function (k) { k.classList.add('lit'); });
+      return;
+    }
+    // Toggle: la hairline del kicker se enciende al entrar y se apaga al
+    // salir, para que la animacion de la seccion se reinicie cada vez.
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var stop = entry.target.closest('.stop');
+        var k = stop && stop.querySelector('.kicker');
+        if (!k) return;
+        if (entry.isIntersecting) k.classList.add('lit');
+        else k.classList.remove('lit');
+      });
+    }, { rootMargin: '0px 0px -40% 0px', threshold: 0 });
+    nodes.forEach(function (n) { io.observe(n); });
+  }
+
+  function buildTrail() {
+    if (!nodes.length) return;
+    var sRect = stage.getBoundingClientRect();
+    var sLeft = sRect.left + window.scrollX;
+    var sTop  = sRect.top  + window.scrollY;
+    var h = stage.offsetHeight;
+    var w = stage.offsetWidth;
+
+    svg.setAttribute('width', w);
+    svg.setAttribute('height', h);
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+
+    // Acotamos el path entre la Y del primer y ultimo nodo. La X del
+    // sendero NO sigue a los nodos (eso forzaba zigzag): la define una
+    // unica sinusoide larga centrada en el ancho del stage. Curvas
+    // amplias y fluidas, pocas inflexiones, como las referencias.
+    var firstN = nodes[0].getBoundingClientRect();
+    var lastN  = nodes[nodes.length - 1].getBoundingClientRect();
+    var y0 = firstN.top + window.scrollY - sTop + firstN.height / 2;
+    var y1 = lastN.top  + window.scrollY - sTop + lastN.height / 2;
+
+    var centerX    = w / 2;
+    var amp        = 78;   // amplitud generosa (~40% del ancho de 390)
+    var wavesTotal = 2;    // 2 ondas en toda la altura -> 3 inflexiones suaves
+    var period     = (y1 - y0) / wavesTotal;
+
+    // Muestreamos la sinusoide a step constante de Y. Catmull-Rom
+    // conecta los puntos despues con tangentes continuas.
+    var dpts = [];
+    var stepY = 22;
+    for (var y = y0; y <= y1; y += stepY) {
+      var phase = ((y - y0) / period) * Math.PI * 2;
+      dpts.push({ x: centerX + amp * Math.sin(phase), y: y });
+    }
+    var endPhase = ((y1 - y0) / period) * Math.PI * 2;
+    dpts.push({ x: centerX + amp * Math.sin(endPhase), y: y1 });
+
+    // Catmull-Rom -> cubicas Bezier
+    var d = 'M ' + dpts[0].x.toFixed(1) + ' ' + dpts[0].y.toFixed(1);
+    for (var i = 0; i < dpts.length - 1; i++) {
+      var p0 = dpts[Math.max(0, i - 1)];
+      var p1 = dpts[i];
+      var p2 = dpts[i + 1];
+      var p3 = dpts[Math.min(dpts.length - 1, i + 2)];
+      var c1x = p1.x + (p2.x - p0.x) / 6;
+      var c1y = p1.y + (p2.y - p0.y) / 6;
+      var c2x = p2.x - (p3.x - p1.x) / 6;
+      var c2y = p2.y - (p3.y - p1.y) / 6;
+      d += ' C ' + c1x.toFixed(1) + ' ' + c1y.toFixed(1) +
+           ' '   + c2x.toFixed(1) + ' ' + c2y.toFixed(1) +
+           ' '   + p2.x.toFixed(1) + ' ' + p2.y.toFixed(1);
+    }
+
+    path.setAttribute('d', d);
+    ghost.setAttribute('d', d);
+    if (shade) shade.setAttribute('d', d);
+    trailLen = path.getTotalLength();
+    path.style.strokeDasharray = trailLen;
+    buildTrailStems();
+    buildTrailLeaves();
+    updateTrail();
+  }
+
+  function updateTrail() {
+    if (!trailLen) return;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    // Gate inicial: el sendero arranca a dibujarse despues de cierto
+    // scroll, para que en la carga no se vea el primer segmento del
+    // tallo "flotando" como sneak peek raro encima del hero.
+    var startGate = 120;
+    var denom = max - startGate;
+    var prog = denom > 0
+      ? Math.min(1, Math.max(0, (window.scrollY - startGate) / denom))
+      : 0;
+    var drawn = trailLen * prog;
+    path.style.strokeDashoffset = trailLen - drawn;
+    updateTrailLeaves(drawn);
+  }
+
+  // OJO: variable propia (trailTicking), NO reusar `ticking`. El sweep de
+  // .reveal (arriba en este mismo IIFE) ya declara `var ticking` y registra su
+  // listener de scroll ANTES que este: como var hoistea al scope de la funcion,
+  // compartir el nombre hacia que el sweep pusiera ticking=true primero y este
+  // handler viera siempre true -> updateTrail no corria nunca y el sendero
+  // quedaba sin dibujarse (regresion del refactor de animaciones, jun 2026).
+  var trailTicking = false;
+  window.addEventListener('scroll', function () {
+    if (!trailTicking) {
+      window.requestAnimationFrame(function () { updateTrail(); trailTicking = false; });
+      trailTicking = true;
+    }
+  }, { passive: true });
+
+  // Rebuild del sendero COALESCIDO y DIFERIDO fuera de la entrada del hero.
+  // buildTrail() reconstruye ~890 segmentos del tallo + las hojas: si corre
+  // mientras los nombres se funden, congela el hilo principal y la animacion
+  // se traba. Antes habia builds sueltos a 700ms y 1800ms que caian JUSTO
+  // encima del fundido de "Agus" y del "&" -> ese era el trabe. Ahora: 1 build
+  // inicial (durante el parse, antes de que arranque la anim) y los re-builds
+  // por fuentes/carga/resize se agrupan en UNO solo, nunca antes de que toda
+  // la intro (nombres + fecha + "Segui el sendero") termine (~3.9s).
+  var HERO_ANIM_END = 3900;
+  var pageT0 = (window.performance && performance.now) ? performance.now() : 0;
+  var rebuildTimer = null;
+  function scheduleBuildTrail() {
+    var now = (window.performance && performance.now) ? performance.now() : 0;
+    var floor = Math.max(0, HERO_ANIM_END - (now - pageT0));
+    clearTimeout(rebuildTimer);
+    rebuildTimer = setTimeout(buildTrail, Math.max(160, floor));
+  }
+
+  window.addEventListener('resize', scheduleBuildTrail);
+
+  buildTrail();  // build inicial: corre en el parse, antes de la animacion
+  // setupKickerObserver(): ya NO se usa. La hairline del kicker ahora se
+  // dibuja con el reveal del propio kicker (.kicker.in::after) y un retardo,
+  // para sincronizarla con la secuencia nombre -> linea -> resto.
+  window.addEventListener('load', scheduleBuildTrail);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(scheduleBuildTrail); }
+
+  /* ---------- 4. Countdown ---------- */
+  var target = new Date('2026-08-01T16:30:00-03:00').getTime();
+  var cdEls = {
+    days:  document.querySelector('[data-cd="days"]'),
+    hours: document.querySelector('[data-cd="hours"]'),
+    mins:  document.querySelector('[data-cd="mins"]'),
+    secs:  document.querySelector('[data-cd="secs"]')
+  };
+  function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+  function tick() {
+    var diff = Math.max(0, target - Date.now());
+    var days  = Math.floor(diff / 86400000); diff -= days * 86400000;
+    var hours = Math.floor(diff / 3600000);  diff -= hours * 3600000;
+    var mins  = Math.floor(diff / 60000);    diff -= mins * 60000;
+    var secs  = Math.floor(diff / 1000);
+    if (cdEls.days)  cdEls.days.textContent  = days;
+    if (cdEls.hours) cdEls.hours.textContent = pad(hours);
+    if (cdEls.mins)  cdEls.mins.textContent  = pad(mins);
+    if (cdEls.secs)  cdEls.secs.textContent  = pad(secs);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ---------- 5. RSVP (1 o 2 invitados) ----------
+     Cada bloque .guest tiene su propio ¿viene? (single-select) y menú
+     (multi-select: alguien puede ser celiaco Y vegetariano). Se cablean todos
+     los bloques; el 2º solo es interactuable cuando esta visible (/dos). */
+  document.querySelectorAll('#rsvp-form .guest').forEach(function (guest) {
+    var att = guest.querySelector('.g-attendance');
+    if (att) {
+      att.querySelectorAll('label').forEach(function (lb) {
+        lb.addEventListener('click', function () {
+          att.querySelectorAll('label').forEach(function (x) { x.classList.remove('active'); });
+          lb.classList.add('active');
+        });
+      });
+    }
+    var menu = guest.querySelector('.g-menu');
+    if (menu) {
+      menu.querySelectorAll('label').forEach(function (lb) {
+        lb.addEventListener('click', function () { lb.classList.toggle('active'); });
+      });
+    }
+  });
+  var msgBody = document.getElementById('msg-body');
+  var msgCharEl = document.getElementById('char-msg');
+  if (msgBody && msgCharEl) {
+    msgBody.addEventListener('input', function () { msgCharEl.textContent = msgBody.value.length; });
+  }
+  // Envío a la Sheet vía Apps Script. mode:'no-cors' + body text/plain (sin
+  // headers) = "simple request": no dispara preflight CORS y la fila se escribe
+  // igual. La respuesta queda opaca (no se puede leer), por eso la UI es
+  // optimista. Si CFG.RSVP_ENDPOINT está vacío, es no-op (no rompe nada).
+  var CFG = window.WEDDING_CFG || {};
+  function postToSheet(payload) {
+    if (!CFG.RSVP_ENDPOINT) return;
+    try {
+      fetch(CFG.RSVP_ENDPOINT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+    } catch (err) { /* sin red: la UI ya mostró el gracias */ }
+  }
+
+  var form = document.getElementById('rsvp-form');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // sólo los bloques VISIBLES (en /dos son dos; si no, uno).
+      var blocks = Array.prototype.filter.call(
+        form.querySelectorAll('.guest'),
+        function (g) { return g.offsetParent !== null; }
+      );
+      for (var i = 0; i < blocks.length; i++) {
+        var nm = blocks[i].querySelector('.g-name');
+        if (!nm.value.trim()) { nm.focus(); return; }
+      }
+      // recolectar datos de cada invitado visible
+      var guests = blocks.map(function (g) {
+        var attEl = g.querySelector('.g-attendance label.active');
+        var menus = Array.prototype.map.call(
+          g.querySelectorAll('.g-menu label.active'),
+          function (m) { return m.getAttribute('data-val'); }
+        );
+        return {
+          invitado:   g.getAttribute('data-guest'),
+          nombre:     g.querySelector('.g-name').value.trim(),
+          asistencia: attEl ? (attEl.getAttribute('data-val') === 'yes' ? 'Sí' : 'No') : '',
+          menu:       menus.join(', '),
+          alergias:   (g.querySelector('.g-allergies').value || '').trim()
+        };
+      });
+      // "Invitacion": x1 = invitación individual (/), x2 = invitación doble (/dos).
+      var invitacion = document.documentElement.getAttribute('data-inv') === '2' ? 'x2' : 'x1';
+      postToSheet({ type: 'rsvp', guests: guests, link: invitacion });
+
+      form.style.display = 'none';
+      var thanks = document.getElementById('thanks');
+      thanks.style.display = 'block';
+      buildTrail();
+      // mostrar el gracias y, tras un instante, un scroll suave que lo deja
+      // visible arriba (con un pequeño margen) y revela el resto de la
+      // invitación debajo, para que los invitados sigan viendo.
+      setTimeout(function () {
+        var y = window.scrollY + thanks.getBoundingClientRect().top - 40;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }, 250);
+    });
+  }
+
+  // form "Para los novios" (mensaje) → misma Sheet, pestaña aparte.
+  var mform = document.getElementById('msg-form');
+  if (mform) {
+    mform.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var nameEl = document.getElementById('msg-name');
+      var bodyEl = document.getElementById('msg-body');
+      postToSheet({
+        type: 'mensaje',
+        nombre:  nameEl ? nameEl.value.trim() : '',
+        mensaje: bodyEl ? bodyEl.value.trim() : ''
+      });
+      mform.style.display = 'none';
+      var mt = document.getElementById('msg-thanks');
+      if (mt) mt.style.display = 'block';
+    });
+  }
+
+  /* ---------- 6. Fotos: QR + link al album compartido ----------
+     PEGAR ACA el link del album compartido de Agus & Santi (Google Fotos/Drive).
+     IMPORTANTE: mientras este vacio, la seccion de fotos se OCULTA por completo.
+     NO se usa el generico photos.google.com como antes, porque abre la cuenta
+     de Google logueada de quien lo abra (parecia "el drive personal"). */
+  var PHOTOS_URL = CFG.PHOTOS_URL || '';
+  var fotosSection = document.getElementById('fotos');
+  var photosLink   = document.getElementById('photos-link');
+  var photosQR     = document.getElementById('photos-qr');
+  if (!PHOTOS_URL) {
+    if (fotosSection) fotosSection.style.display = 'none';
+  } else if (photosLink && photosQR) {
+    photosLink.href = PHOTOS_URL;
+    // QR como PNG con CANAL ALFA real (quickchart): dark = --ink, fondo transparente.
+    photosQR.src = 'https://quickchart.io/qr?size=320&margin=1&ecLevel=M' +
+      '&dark=3a3026&light=00000000&text=' +
+      encodeURIComponent(PHOTOS_URL);
+  }
+
+  /* ---------- 7. Playlist: sugerir una canción → Sheet (pestaña "Canciones") ----------
+     El invitado escribe un tema; se guarda en la Sheet. Los novios arman la
+     playlist a partir de las sugerencias. */
+  var songForm = document.getElementById('song-form');
+  if (songForm) {
+    songForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var inp = document.getElementById('song-input');
+      var val = inp ? inp.value.trim() : '';
+      if (!val) { if (inp) inp.focus(); return; }
+      // "De parte de": reusamos el/los nombre(s) que el invitado ya cargó en el
+      // RSVP (no pedimos un campo extra acá). En /dos van los dos nombres.
+      var dos = document.documentElement.getAttribute('data-inv') === '2';
+      var nombres = (dos ? ['name-1', 'name-2'] : ['name-1']).map(function (id) {
+        var n = document.getElementById(id);
+        return n ? n.value.trim() : '';
+      }).filter(Boolean);
+      postToSheet({ type: 'cancion', nombre: nombres.join(' y '), cancion: val });
+      songForm.style.display = 'none';
+      var st = document.getElementById('song-thanks');
+      if (st) st.style.display = 'block';
+    });
+  }
+})();
+</script>
+
+<!-- Animacion de la seccion "los novios de chicos": las dos fotos aparecen y, al
+     scrollear, se mueven (una sube, otra baja) hasta quedar a la misma altura. -->
+<script>
+(function () {
+  if (!window.gsap || !window.ScrollTrigger) return;   // sin GSAP: fotos y frase quedan visibles
+  gsap.registerPlugin(ScrollTrigger);
+  // las fotos salen de los bordes (izq/der) con un leve movimiento + fade in rapido al llegar
+  gsap.timeline({ scrollTrigger: { trigger: '#ninos', start: 'top 80%', toggleActions: 'play none none reverse' } })
+    .from('.nino-izq img', { autoAlpha: 0, xPercent: -22, duration: 1.1, ease: 'power3.out' })
+    .from('.nino-der img', { autoAlpha: 0, xPercent: 22, duration: 1.1, ease: 'power3.out' }, '<0.15');
+
+  // parallax sutil ligado al scroll: la izquierda BAJA, la derecha SUBE.
+  // el recorrido completo (±38px) ocurre MIENTRAS la seccion esta a la vista
+  // (start cuando su tope llega al 85% del viewport, end cuando su base llega al 15%),
+  // asi se nota el movimiento justo cuando la mira. scrub suave = smooth, sin saltos.
+  if (!window.matchMedia || !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const drift = { trigger: '#ninos', start: 'top 85%', end: 'bottom 15%', scrub: 1 };
+    gsap.fromTo('.nino-izq img', { y: -38 }, { y: 38, ease: 'none', scrollTrigger: drift });
+    gsap.fromTo('.nino-der img', { y: 38 }, { y: -38, ease: 'none', scrollTrigger: drift });
+  }
+})();
+</script>
+</body>
+</html>

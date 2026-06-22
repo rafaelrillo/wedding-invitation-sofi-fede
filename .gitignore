@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+.vercel
+# temporales/backups de la sesión de pulido
+index.html.bak-washes
+assets/draws/_*-src.jpeg

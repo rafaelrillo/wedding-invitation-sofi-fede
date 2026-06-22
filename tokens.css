@@ -1,0 +1,100 @@
+/* ============================================================================
+   tokens.css — GENERADO POR CORTEX.  ⚠ No editar a mano.
+   Para regenerar:   node build-tokens.mjs
+   ----------------------------------------------------------------------------
+   Design system de Agus & Santi — paleta cálida earthy.
+
+   Estructura:
+     1. ANCLAS (--cream, --ink, --terra, --sage, --gold, ...): los colores
+        exactos del rediseño. Son las variables que usa index.html.
+     2. PALETAS TONALES (--neutral-XX, --terra-XX, --sage-XX, --gold-XX):
+        rampas completas generadas por Cortex desde el hue/chroma del ancla.
+        Disponibles para ajustes finos (sombras, hovers, washes).
+     3. HAIRLINES: --line / --line-strong, derivadas de --ink con color-mix.
+
+   Auditoría APCA (verificada por Cortex):
+   ink/cream             |Lc|= 90.2   OK (incluso texto chico)
+   ink/cream2            |Lc|= 83.2   OK (incluso texto chico)
+   inkSoft/cream         |Lc|= 62.2   OK (texto normal)
+   inkName/cream         |Lc|= 73.3   OK (texto normal)
+   terra/cream           |Lc|= 55.6   AL LÍMITE (solo texto grande)
+   terraDeep/cream       |Lc|= 67.6   OK (texto normal)
+   sage/cream            |Lc|= 51.1   AL LÍMITE (solo texto grande)
+   gold/cream            |Lc|= 40.2   BAJO (no usar para texto)
+   cream/ink             |Lc|= 93.2   OK (incluso texto chico)
+   ============================================================================ */
+
+:root {
+  /* — 1. ANCLAS (colores exactos del rediseño) — */
+  --cream:       #f4f1e8;   /* papel cálido (fondo)         · tono 95 */
+  --cream-2:     #ebe4d3;   /* crema más profundo           · tono 91 */
+  --ink:         #3a3026;   /* marrón oscuro cálido (texto) · tono 21  */
+  --ink-soft:    #877560;   /* texto secundario             · tono 50 */
+  --ink-name:    #6b5c47;   /* nombres del hero             · tono 40 */
+  --terra:       #c0734a;   /* terracota (acento)           · tono 56 */
+  --terra-deep:  #a4572f;   /* terracota profundo           · tono 46 */
+  --sage:        #8b9471;   /* verde salvia (enredadera)    · tono 60 */
+  --gold:        #c6a06a;   /* dorado trigo (puntitos)      · tono 68 */
+  --marron:      #6b5c47;   /* alias para hojas marrón sutil */
+
+  /* — 2. PALETAS TONALES (Cortex) — rampas completas por hue.
+     Disponibles si en algún momento querés un sage más claro para un wash,
+     o un terra más oscuro para un hover, etc. — */
+
+  /* neutral cálido (de cream a ink) — hue 116°, chroma 6 */
+  --neutral-5: #11110a;
+  --neutral-10: #1c1c14;
+  --neutral-20: #313128;
+  --neutral-30: #47473e;
+  --neutral-40: #5f5f55;
+  --neutral-50: #78776d;
+  --neutral-60: #929186;
+  --neutral-70: #adaca0;
+  --neutral-80: #c9c7ba;
+  --neutral-90: #e5e3d6;
+  --neutral-95: #f3f1e4;
+
+  /* terra (terracota) — hue 46°, chroma 45 */
+  --terra-5: #230900;
+  --terra-10: #341100;
+  --terra-20: #552000;
+  --terra-30: #773204;
+  --terra-40: #95491c;
+  --terra-50: #b46132;
+  --terra-60: #d37948;
+  --terra-70: #f39360;
+  --terra-80: #ffb691;
+  --terra-90: #ffdbcb;
+  --terra-95: #ffede6;
+
+  /* sage (verde salvia) — hue 125°, chroma 18 */
+  --sage-5: #0d1301;
+  --sage-10: #171e07;
+  --sage-20: #2c3319;
+  --sage-30: #424a2e;
+  --sage-40: #5a6244;
+  --sage-50: #727b5b;
+  --sage-60: #8c9473;
+  --sage-70: #a6af8c;
+  --sage-80: #c2cba6;
+  --sage-90: #dee7c1;
+  --sage-95: #ecf5ce;
+
+  /* gold (dorado trigo) — hue 76°, chroma 35 */
+  --gold-5: #1b0e00;
+  --gold-10: #291800;
+  --gold-20: #442b00;
+  --gold-30: #624000;
+  --gold-40: #7e5713;
+  --gold-50: #9a6f2a;
+  --gold-60: #b78841;
+  --gold-70: #d4a359;
+  --gold-80: #f2be71;
+  --gold-90: #ffddb1;
+  --gold-95: #ffeedb;
+
+  /* — 3. HAIRLINES (líneas finitas): derivadas de --ink con color-mix —
+     Mantienen el mismo hue del texto pero a baja opacidad, así nunca chocan. */
+  --line:        color-mix(in srgb, var(--ink) 16%, transparent);
+  --line-strong: color-mix(in srgb, var(--ink) 42%, transparent);
+}

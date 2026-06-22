@@ -1,0 +1,22 @@
+# Sitio estático: subir solo lo que el index.html necesita para servir.
+# Excluir package.json hace que Vercel lo trate como estático (sin build).
+node_modules
+package.json
+package-lock.json
+build-tokens.mjs
+shoot-hero.cjs
+shoot-sendero.cjs
+cortex-sdk
+diseño
+handoff
+referencias
+CLAUDE.md
+LEEME.md
+index-respaldo-2026-05-22.html
+index.html.bak-washes
+.git
+.DS_Store
+# en draws solo se usan los .webp; el resto (fuentes JPEG, PNG intermedios, scripts) no
+assets/draws/*.jpeg
+assets/draws/*.png
+assets/draws/*.cjs
