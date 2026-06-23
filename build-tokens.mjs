@@ -34,16 +34,21 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // ─────────────────────────────────────────────────────────────────────────────
 // 1) ANCLAS — colores exactos del rediseño actual de index.html
 // ─────────────────────────────────────────────────────────────────────────────
+// SOFI & FEDE — fondos cálidos heredados de agus, pero el ACENTO pasa de
+// terracota/tierra a los VERDES de las hojas del save the date (eucalipto/olivo
+// cálido, muestreados con PIL: hue ~60-85°, baja saturación). Los nombres de
+// variable --terra/--terra-deep se conservan (los usa index.html) pero su valor
+// ahora es verde hoja. Rename semántico = cleanup posterior.
 const ANCHOR = {
-  cream:      '#f4f1e8',  // papel cálido (fondo principal)
-  cream2:     '#ebe4d3',  // crema más profundo (variante)
-  ink:        '#3a3026',  // marrón oscuro cálido (texto principal)
-  inkSoft:    '#877560',  // texto secundario / labels
-  inkName:    '#6b5c47',  // marrón medio: nombres del hero (más liviano)
-  terra:      '#c0734a',  // terracota (acento principal)
-  terraDeep:  '#a4572f',  // terracota profundo
-  sage:       '#8b9471',  // verde salvia (la enredadera y wash sage)
-  gold:       '#c6a06a',  // dorado trigo (puntitos de floración)
+  cream:      '#f4f1e8',  // papel cálido (fondo principal) — KEEP
+  cream2:     '#ebe4d3',  // crema más profundo (variante) — KEEP
+  ink:        '#3a3026',  // marrón oscuro cálido (texto principal) — KEEP cálido
+  inkSoft:    '#877560',  // texto secundario / labels — KEEP
+  inkName:    '#6b5c47',  // marrón medio: nombres del hero — KEEP
+  terra:      '#6f7d4f',  // ACENTO = verde eucalipto (era terracota #c0734a)
+  terraDeep:  '#515e39',  // acento profundo = olivo (era terracota #a4572f)
+  sage:       '#8b9471',  // verde salvia (washes / hojas) — KEEP, ya es verde
+  gold:       '#b89b66',  // dorado trigo apagado (centros de orquídea / brotes)
 };
 
 // utilidades hex ↔ rgb01 ↔ HCT
@@ -77,9 +82,9 @@ const RAMP_TONES = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95];
 // paleta se sienta cálida pero no fosforescente.
 const SEEDS = {
   neutral: { hue: hue.cream,     chroma: 6,   name: 'neutral' },  // beige cálido
-  terra:   { hue: hue.terra,     chroma: 45,  name: 'terra'   },  // terracota
+  terra:   { hue: hue.terra,     chroma: 24,  name: 'terra'   },  // acento verde eucalipto (muted)
   sage:    { hue: hue.sage,      chroma: 18,  name: 'sage'    },  // verde salvia
-  gold:    { hue: hue.gold,      chroma: 35,  name: 'gold'    },  // dorado trigo
+  gold:    { hue: hue.gold,      chroma: 28,  name: 'gold'    },  // dorado trigo apagado
 };
 
 const palettes = Object.fromEntries(
@@ -164,7 +169,7 @@ const css = `/* ================================================================
    tokens.css — GENERADO POR CORTEX.  ⚠ No editar a mano.
    Para regenerar:   node build-tokens.mjs
    ----------------------------------------------------------------------------
-   Design system de Agus & Santi — paleta cálida earthy.
+   Design system de Sofi & Fede — fondos cálidos + acento verde hoja (eucalipto).
 
    Estructura:
      1. ANCLAS (--cream, --ink, --terra, --sage, --gold, ...): los colores
@@ -185,9 +190,9 @@ ${auditLines}
   --ink:         ${ANCHOR.ink};   /* marrón oscuro cálido (texto) · tono ${tone.ink.toFixed(0)}  */
   --ink-soft:    ${ANCHOR.inkSoft};   /* texto secundario             · tono ${tone.inkSoft.toFixed(0)} */
   --ink-name:    ${ANCHOR.inkName};   /* nombres del hero             · tono ${tone.inkName.toFixed(0)} */
-  --terra:       ${ANCHOR.terra};   /* terracota (acento)           · tono ${tone.terra.toFixed(0)} */
-  --terra-deep:  ${ANCHOR.terraDeep};   /* terracota profundo           · tono ${tone.terraDeep.toFixed(0)} */
-  --sage:        ${ANCHOR.sage};   /* verde salvia (enredadera)    · tono ${tone.sage.toFixed(0)} */
+  --terra:       ${ANCHOR.terra};   /* verde eucalipto (acento)     · tono ${tone.terra.toFixed(0)} */
+  --terra-deep:  ${ANCHOR.terraDeep};   /* olivo profundo (acento)      · tono ${tone.terraDeep.toFixed(0)} */
+  --sage:        ${ANCHOR.sage};   /* verde salvia (washes/hojas)  · tono ${tone.sage.toFixed(0)} */
   --gold:        ${ANCHOR.gold};   /* dorado trigo (puntitos)      · tono ${tone.gold.toFixed(0)} */
   --marron:      ${ANCHOR.inkName};   /* alias para hojas marrón sutil */
 

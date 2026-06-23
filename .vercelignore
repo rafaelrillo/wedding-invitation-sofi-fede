@@ -20,3 +20,6 @@ index.html.bak-washes
 assets/draws/*.jpeg
 assets/draws/*.png
 assets/draws/*.cjs
+
+# material fuente del brief (no se deploya)
+_brief

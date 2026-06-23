@@ -2,7 +2,7 @@
    tokens.css — GENERADO POR CORTEX.  ⚠ No editar a mano.
    Para regenerar:   node build-tokens.mjs
    ----------------------------------------------------------------------------
-   Design system de Agus & Santi — paleta cálida earthy.
+   Design system de Sofi & Fede — fondos cálidos + acento verde hoja (eucalipto).
 
    Estructura:
      1. ANCLAS (--cream, --ink, --terra, --sage, --gold, ...): los colores
@@ -17,10 +17,10 @@
    ink/cream2            |Lc|= 83.2   OK (incluso texto chico)
    inkSoft/cream         |Lc|= 62.2   OK (texto normal)
    inkName/cream         |Lc|= 73.3   OK (texto normal)
-   terra/cream           |Lc|= 55.6   AL LÍMITE (solo texto grande)
-   terraDeep/cream       |Lc|= 67.6   OK (texto normal)
+   terra/cream           |Lc|= 62.4   OK (texto normal)
+   terraDeep/cream       |Lc|= 75.3   OK (incluso texto chico)
    sage/cream            |Lc|= 51.1   AL LÍMITE (solo texto grande)
-   gold/cream            |Lc|= 40.2   BAJO (no usar para texto)
+   gold/cream            |Lc|= 43.9   BAJO (no usar para texto)
    cream/ink             |Lc|= 93.2   OK (incluso texto chico)
    ============================================================================ */
 
@@ -31,10 +31,10 @@
   --ink:         #3a3026;   /* marrón oscuro cálido (texto) · tono 21  */
   --ink-soft:    #877560;   /* texto secundario             · tono 50 */
   --ink-name:    #6b5c47;   /* nombres del hero             · tono 40 */
-  --terra:       #c0734a;   /* terracota (acento)           · tono 56 */
-  --terra-deep:  #a4572f;   /* terracota profundo           · tono 46 */
-  --sage:        #8b9471;   /* verde salvia (enredadera)    · tono 60 */
-  --gold:        #c6a06a;   /* dorado trigo (puntitos)      · tono 68 */
+  --terra:       #6f7d4f;   /* verde eucalipto (acento)     · tono 50 */
+  --terra-deep:  #515e39;   /* olivo profundo (acento)      · tono 38 */
+  --sage:        #8b9471;   /* verde salvia (washes/hojas)  · tono 60 */
+  --gold:        #b89b66;   /* dorado trigo (puntitos)      · tono 65 */
   --marron:      #6b5c47;   /* alias para hojas marrón sutil */
 
   /* — 2. PALETAS TONALES (Cortex) — rampas completas por hue.
@@ -54,18 +54,18 @@
   --neutral-90: #e5e3d6;
   --neutral-95: #f3f1e4;
 
-  /* terra (terracota) — hue 46°, chroma 45 */
-  --terra-5: #230900;
-  --terra-10: #341100;
-  --terra-20: #552000;
-  --terra-30: #773204;
-  --terra-40: #95491c;
-  --terra-50: #b46132;
-  --terra-60: #d37948;
-  --terra-70: #f39360;
-  --terra-80: #ffb691;
-  --terra-90: #ffdbcb;
-  --terra-95: #ffede6;
+  /* terra (terracota) — hue 126°, chroma 24 */
+  --terra-5: #0c1300;
+  --terra-10: #151f01;
+  --terra-20: #293411;
+  --terra-30: #3f4b25;
+  --terra-40: #57633b;
+  --terra-50: #6f7c51;
+  --terra-60: #899669;
+  --terra-70: #a3b182;
+  --terra-80: #becc9b;
+  --terra-90: #dae9b6;
+  --terra-95: #e9f7c3;
 
   /* sage (verde salvia) — hue 125°, chroma 18 */
   --sage-5: #0d1301;
@@ -80,18 +80,18 @@
   --sage-90: #dee7c1;
   --sage-95: #ecf5ce;
 
-  /* gold (dorado trigo) — hue 76°, chroma 35 */
-  --gold-5: #1b0e00;
-  --gold-10: #291800;
-  --gold-20: #442b00;
-  --gold-30: #624000;
-  --gold-40: #7e5713;
-  --gold-50: #9a6f2a;
-  --gold-60: #b78841;
-  --gold-70: #d4a359;
-  --gold-80: #f2be71;
-  --gold-90: #ffddb1;
-  --gold-95: #ffeedb;
+  /* gold (dorado trigo) — hue 83°, chroma 28 */
+  --gold-5: #190f00;
+  --gold-10: #261900;
+  --gold-20: #412d00;
+  --gold-30: #5b430f;
+  --gold-40: #755a25;
+  --gold-50: #90733b;
+  --gold-60: #ab8c52;
+  --gold-70: #c8a769;
+  --gold-80: #e5c282;
+  --gold-90: #ffdea5;
+  --gold-95: #ffefd7;
 
   /* — 3. HAIRLINES (líneas finitas): derivadas de --ink con color-mix —
      Mantienen el mismo hue del texto pero a baja opacidad, así nunca chocan. */
