@@ -379,11 +379,9 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
+    gap: 4px;
     line-height: 1;
     position: relative;
-    /* el <h1> trae bold por defecto, pero New Icon solo tiene peso regular ->
-       el navegador fabricaba una negrita falsa. Forzamos 400 (peso real fino). */
     font-weight: 400;
   }
   /* cada novio: nombre + apellido apilados */
@@ -397,8 +395,8 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
      centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
-  .hero-names .name-group:first-of-type { transform: translateY(-24px); }
-  .hero-names .name-group:last-of-type  { transform: translateY(15px); }
+  .hero-names .name-group:first-of-type { transform: translateY(-10px); }
+  .hero-names .name-group:last-of-type  { transform: translateY(10px); }
   /* nombres: inicial en script + resto del nombre en serif mayuscula.
      Sin escalon (translateX): el swash de la A script es ancho y el
      .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
@@ -415,13 +413,13 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   .ini {
     font-family: 'Segatta', cursive;
-    font-size: 96px;
+    font-size: 120px;
     line-height: 1;
     color: var(--cream);
   }
   .rest {
     font-family: 'Segatta', cursive;
-    font-size: 84px;
+    font-size: 108px;
     letter-spacing: 0;
     text-transform: none;
     color: var(--cream);
@@ -433,7 +431,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
      text-align center para que el glifo quede bien centrado en su caja. */
   .hero-amp {
     font-family: 'Segatta', cursive;
-    font-size: 108px;
+    font-size: 132px;
     line-height: 1;
     color: rgba(255, 255, 255, 0.45);  /* blanco translucido sobre la foto */
     position: absolute;
@@ -1348,7 +1346,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         <p class="ev-address reveal">Universidad San Pablo · Solano Vera, T4129</p>
         <span class="ev-divider reveal"></span>
         <p class="ev-hour reveal">16:30 hs</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=Capilla+Universidad+San+Pablo%2C+Yerba+Buena%2C+Tucum%C3%A1n" target="_blank" rel="noopener" class="btn reveal">Cómo llegar a la capilla</a>
+        <a href="https://maps.app.goo.gl/XRt4R1zVuYXvVCHK8" target="_blank" rel="noopener" class="btn reveal">Cómo llegar a la capilla</a>
       </div>
     </section>
 
@@ -1361,7 +1359,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         <p class="ev-address reveal">Dirección a confirmar</p>
         <span class="ev-divider reveal"></span>
         <p class="ev-hour reveal">18:00 hs</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=La+Arboleda+eventos%2C+Yerba+Buena%2C+Tucum%C3%A1n" target="_blank" rel="noopener" class="btn reveal">Cómo llegar al salón</a>
+        <a href="https://maps.app.goo.gl/cFaGeMvU2K2TuwwF7" target="_blank" rel="noopener" class="btn reveal">Cómo llegar al salón</a>
       </div>
     </section>
 
@@ -1429,7 +1427,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     </section>
 
     <!-- ============ v.5 · PLAYLIST ============ -->
-    <section class="stop" data-side="right">
+    <section class="stop" data-side="left">
       <span class="stop-wash wash-gold"></span>
       <div class="stop-body">
         <p class="kicker reveal">Playlist</p>
