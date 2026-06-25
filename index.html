@@ -22,22 +22,18 @@ var fotosOn=fm?fm[1]==="on":Date.now()>=new Date('2026-08-08T00:00:00-03:00').ge
 if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 
 <!-- ==========================================================================
-     CONFIG — Pegá acá las 3 URLs. Es el ÚNICO lugar que hay que tocar para
+     CONFIG — Pegá acá las 2 URLs. Es el ÚNICO lugar que hay que tocar para
      conectar la invitación. No toca el diseño ni la lógica.
-       · RSVP_ENDPOINT      → URL del Apps Script (web app) que guarda en la Sheet.
-                              Pasos para obtenerla: ver apps-script/SETUP.md
-       · SPOTIFY_PLAYLIST   → URL de la playlist colaborativa de Spotify.
-       · PHOTOS_URL         → URL de la carpeta de Drive/Fotos (modo "aportar").
+       · RSVP_ENDPOINT  → URL del Apps Script (web app) que guarda en la Sheet.
+                          Pasos para obtenerla: ver apps-script/SETUP.md
+       · PHOTOS_URL     → URL de la carpeta de Drive/Fotos (modo "aportar").
      Mientras una quede vacía (''), su sección se oculta/queda inerte sola.
+     NO pegar acá las URLs de otra boda (irían al backend equivocado).
      ========================================================================== -->
 <script>
   window.WEDDING_CFG = {
-    // SOFI & FEDE — vacías hasta fase E (integraciones, bead wedding-6).
-    // Mientras estén '' cada sección se oculta/queda inerte sola.
-    // NO pegar acá las URLs de otra boda (irían al backend equivocado).
-    RSVP_ENDPOINT:    '',
-    SPOTIFY_PLAYLIST: '',
-    PHOTOS_URL:       ''
+    RSVP_ENDPOINT: 'https://script.google.com/macros/s/AKfycbzPuj2J7LZbf6QRbeGqZxWKxvqQLYxFfCmYwNnkz7csaoqV-pv7sDourFQvEG7UfOo99g/exec',
+    PHOTOS_URL:    'https://drive.google.com/drive/folders/10y7K8UQFRgv-dd2bpzaI9XDZVIO7YCMK?usp=sharing'
   };
 </script>
 

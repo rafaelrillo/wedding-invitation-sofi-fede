@@ -1,11 +1,10 @@
 /**
- * Agus & Santi — backend del RSVP (Google Apps Script).
+ * Sofi & Fede — backend del RSVP (Google Apps Script).
  *
  * Recibe los POST del formulario de la invitación y los escribe en la
  * Google Sheet a la que está ligado este script. Dos tipos de envío:
  *   · type:'rsvp'     → una fila por invitado en la pestaña "Confirmaciones"
  *   · type:'mensaje'  → una fila en la pestaña "Mensajes"
- *   · type:'cancion'  → una fila en la pestaña "Canciones"
  *
  * Está pensado para correr LIGADO a la Sheet (Extensiones → Apps Script
  * desde la propia hoja), por eso usa getActiveSpreadsheet().
