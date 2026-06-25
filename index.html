@@ -1401,6 +1401,32 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
       </div>
     </section>
 
+    <!-- ============ v.5 · PLAYLIST ============ -->
+    <section class="stop" data-side="right">
+      <span class="stop-wash wash-gold"></span>
+      <div class="stop-body">
+        <p class="kicker reveal">Playlist</p>
+        <h2 class="stop-title reveal photos-title">
+          <span class="photos-sumar">Sugerí</span>
+          <span class="song-mid">una <span class="song-word">canción</span></span>
+          <span class="photos-sub accent-italic">para la fiesta</span>
+        </h2>
+        <p class="copy reveal">Sumá el tema que no puede faltar. La playlist la hacemos entre todos.</p>
+        <div class="music-draws reveal"><img class="music-draw" src="/assets/draws/spotify-draw.webp" alt="Nota musical dibujada"></div>
+        <form id="song-form" class="rsvp-form reveal" novalidate>
+          <div class="field">
+            <label for="song-input">La canción</label>
+            <input id="song-input" type="text" maxlength="120" placeholder="Tema y artista" autocomplete="off" />
+          </div>
+          <button type="submit" class="btn solid" style="margin-top:8px;">Sugerir canción</button>
+        </form>
+        <div id="song-thanks" class="thanks" style="display:none;">
+          <div class="ok">¡Anotada!</div>
+          <div class="sub">Va para la playlist de la fiesta.</div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ vi · FOTOS ============ -->
     <section class="stop" data-side="left" id="fotos">
       <div class="stop-body">
