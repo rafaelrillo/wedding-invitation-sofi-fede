@@ -66,8 +66,6 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     font-family: 'New Icon Serif';
     src: url('/fonts/NewIconSerif-Regular.woff2') format('woff2'),
          url('/fonts/NewIconSerif-Regular.woff') format('woff');
-    /* block (no swap): mientras carga, texto invisible en vez de mostrar la
-       fuente de respaldo. Con preload + archivo local, el bloqueo es de ms. */
     font-weight: 400; font-style: normal; font-display: block;
   }
   @font-face {
@@ -81,6 +79,37 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     src: url('/fonts/NewIconScript-Regular.woff2') format('woff2'),
          url('/fonts/NewIconScript-Regular.woff') format('woff');
     font-weight: 400; font-style: normal; font-display: block;
+  }
+
+  /* ---- Fuentes Sofi & Fede (selección de Pía) ---- */
+  @font-face {
+    font-family: 'Brittany Signature';
+    src: url('/fonts/BrittanySignature.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: block;
+  }
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/fonts/CormorantGaramond-VariableFont_wght.woff2') format('woff2 supports variations'),
+         url('/fonts/CormorantGaramond-VariableFont_wght.woff2') format('woff2');
+    font-weight: 300 700; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    src: url('/fonts/CormorantGaramond-Italic-VariableFont_wght.woff2') format('woff2 supports variations'),
+         url('/fonts/CormorantGaramond-Italic-VariableFont_wght.woff2') format('woff2');
+    font-weight: 300 700; font-style: italic; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Raleway';
+    src: url('/fonts/Raleway-VariableFont_wght.woff2') format('woff2 supports variations'),
+         url('/fonts/Raleway-VariableFont_wght.woff2') format('woff2');
+    font-weight: 100 900; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Raleway';
+    src: url('/fonts/Raleway-Italic-VariableFont_wght.woff2') format('woff2 supports variations'),
+         url('/fonts/Raleway-Italic-VariableFont_wght.woff2') format('woff2');
+    font-weight: 100 900; font-style: italic; font-display: swap;
   }
 
   /* ---- Paleta: viene de tokens.css (generado por Cortex). Ver build-tokens.mjs.
@@ -385,14 +414,13 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     margin: -34px 0;
   }
   .ini {
-    font-family: 'Parisienne', cursive;
+    font-family: 'Brittany Signature', cursive;
     font-size: 96px;
     line-height: 1;
     color: var(--cream);
   }
   .rest {
-    /* SOFI & FEDE: el nombre va COMPLETO en script firma (no mayúscula serif). */
-    font-family: 'Parisienne', cursive;
+    font-family: 'Brittany Signature', cursive;
     font-size: 84px;
     letter-spacing: 0;
     text-transform: none;
@@ -404,7 +432,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
      (z-index 1) quedan legibles encima y el & asoma en los huecos.
      text-align center para que el glifo quede bien centrado en su caja. */
   .hero-amp {
-    font-family: 'Parisienne', cursive;
+    font-family: 'Brittany Signature', cursive;
     font-size: 108px;
     line-height: 1;
     color: rgba(255, 255, 255, 0.45);  /* blanco translucido sobre la foto */
@@ -1128,20 +1156,19 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
      sola; este selector tiene mas especificidad y gana (jun 2026). */
   .foot-names.reveal.in { transform: translateY(-40px); }
   .foot-names .f-ini {
-    font-family: 'Parisienne', cursive;
-    font-size: 55px;   /* +20% (jun 2026) */
-    color: var(--cream);   /* claro: sobre la foto de cierre (jun 2026) */
+    font-family: 'Brittany Signature', cursive;
+    font-size: 55px;
+    color: var(--cream);
   }
   .foot-names .f-rest {
-    /* SOFI & FEDE: footer también en script firma completo (como el hero). */
-    font-family: 'Parisienne', cursive;
+    font-family: 'Brittany Signature', cursive;
     font-size: 50px;
     letter-spacing: 0;
     text-transform: none;
-    color: var(--cream);   /* claro: sobre la foto de cierre */
+    color: var(--cream);
   }
   .foot-names .f-amp {
-    font-family: 'Parisienne', cursive;
+    font-family: 'Brittany Signature', cursive;
     font-size: 46px;   /* +20% (jun 2026) */
     color: rgba(255, 255, 255, 0.45);  /* blanco translucido, igual que el "&" del hero */
   }
@@ -1185,7 +1212,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
 
   /* ====== CAPA DE COMPARACION TIPOGRAFICA (op 1/2/3) ====== */
-  :root{ --font-title:'Cormorant Garamond', Georgia, serif; --font-body:'DM Sans', system-ui, sans-serif; }
+  :root{ --font-title:'Cormorant Garamond', Georgia, serif; --font-body:'Raleway', system-ui, sans-serif; --font-script:'Brittany Signature', cursive; }
   body{ font-weight:400; }
   .kicker, .note-k, .dress-k, .bank-k, .count-lbl,
   #rsvp-form .field > label, #msg-form .field > label, .field label, .btn{ font-weight:600; }
