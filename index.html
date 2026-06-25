@@ -41,6 +41,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
      de pintar. Evita el "flash de Comic Sans" (la fuente de respaldo del
      generico `cursive` en Windows es Comic Sans MS) mientras New Icon Script
      carga. crossorigin es obligatorio en preload de fuentes. -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/NewIconScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/NewIconSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/NewIconSerif-Condensed.woff2" as="font" type="font/woff2" crossorigin>
@@ -1235,10 +1236,10 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .g-attendance label{ justify-content:center; padding:22px 12px; font-size:13px; letter-spacing:0.08em; }
   /* POR DEFAULT: "Si, voy" en verde tenue (rampa sage) ; "No puedo" en terra-deep (mismo color que "antes del 17 de julio") */
   .g-attendance label[data-val="yes"]{ background:rgba(139,148,113,0.12); border-color:var(--sage-50); color:var(--ink); }
-  .g-attendance label[data-val="no"]{ background:transparent; color:var(--terra-deep); border-color:var(--terra-deep); }
+  .g-attendance label[data-val="no"]{ background:transparent; color:#a4572f; border-color:#a4572f; }
   /* al seleccionar: se intensifica + anillo interno para marcar la eleccion */
   .g-attendance label[data-val="yes"].active{ background:var(--sage-80); box-shadow:inset 0 0 0 1.5px var(--sage-50); }
-  .g-attendance label[data-val="no"].active{ background:var(--terra-95); box-shadow:inset 0 0 0 1.5px var(--terra-deep); }
+  .g-attendance label[data-val="no"].active{ background:#ffede6; box-shadow:inset 0 0 0 1.5px #a4572f; color:#a4572f; }
   /* PLAYLIST: logo Spotify dibujado EN EL FLUJO, centrado (igual que vestido/traje del dress code) */
   .music-draws{ margin-top:30px; display:flex; justify-content:center; }
   .music-draw{ display:block; height:150px; width:auto; }
@@ -1386,19 +1387,15 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         <div class="bank reveal">
           <div class="bank-row">
             <div class="bank-k">Titular</div>
-            <div class="bank-v">A confirmar</div>
+            <div class="bank-v">Gundlach Federico J</div>
           </div>
           <div class="bank-row">
             <div class="bank-k">Alias</div>
             <div class="bank-v">SOFIYFEDE.PESOS</div>
           </div>
           <div class="bank-row">
-            <div class="bank-k">CBU</div>
-            <div class="bank-v">A confirmar</div>
-          </div>
-          <div class="bank-row">
             <div class="bank-k">Banco</div>
-            <div class="bank-v">A confirmar</div>
+            <div class="bank-v">BBVA Argentina</div>
           </div>
         </div>
         <button type="button" class="btn reveal" onclick="if(navigator.clipboard){navigator.clipboard.writeText('SOFIYFEDE.PESOS');} this.textContent='Copiado'; setTimeout(()=>{this.textContent='Copiar alias en pesos';}, 1800);">Copiar alias en pesos</button>
@@ -1407,19 +1404,15 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         <div class="bank reveal">
           <div class="bank-row">
             <div class="bank-k">Titular</div>
-            <div class="bank-v">A confirmar</div>
+            <div class="bank-v">Gundlach Federico J</div>
           </div>
           <div class="bank-row">
             <div class="bank-k">Alias</div>
             <div class="bank-v">SOFIYFEDE.USD</div>
           </div>
           <div class="bank-row">
-            <div class="bank-k">CBU</div>
-            <div class="bank-v">A confirmar</div>
-          </div>
-          <div class="bank-row">
             <div class="bank-k">Banco</div>
-            <div class="bank-v">A confirmar</div>
+            <div class="bank-v">BBVA Argentina</div>
           </div>
         </div>
         <button type="button" class="btn reveal" onclick="if(navigator.clipboard){navigator.clipboard.writeText('SOFIYFEDE.USD');} this.textContent='Copiado'; setTimeout(()=>{this.textContent='Copiar alias en dólares';}, 1800);">Copiar alias en dólares</button>
