@@ -364,7 +364,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .stop-flora-top   { top: 0px; left: 50%; transform: translateX(calc(-50% - 35px)); width: 255px; }
   .stop-flora-right { top: -10px; right: -60px; transform: scaleX(-1); width: 200px; }
 
-  .hero-eyebrow { margin-top: -33px; margin-bottom: 65px; }
+  .hero-eyebrow { margin-top: -10px; margin-bottom: 65px; }
   /* width controla el tamano del SVG (texto + arco). 290px ≈ +10% sobre 264.
      translateX corre "Nos casamos" a la derecha para centrarlo OPTICAMENTE con
      los nombres (que quedan apoyados a la derecha por los swashes de A y S). */
@@ -380,7 +380,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 80px;
     line-height: 1;
     position: relative;
     font-weight: 400;
@@ -396,8 +396,8 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
      centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
-  .hero-names .name-group:first-of-type { transform: translateY(-65px); }
-  .hero-names .name-group:last-of-type  { transform: translateY(15px); }
+  .hero-names .name-group:first-of-type { transform: translateY(-30px); }
+  .hero-names .name-group:last-of-type  { transform: translateY(-52px); }
   /* nombres: inicial en script + resto del nombre en serif mayuscula.
      Sin escalon (translateX): el swash de la A script es ancho y el
      .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
@@ -436,7 +436,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     line-height: 1;
     color: rgba(255, 255, 255, 0.65);
     position: absolute;
-    top: 65%;
+    top: 50%;
     left: 50%;
     transform: translate(calc(-50% + 23px), -50%);
     text-align: center;
@@ -548,7 +548,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     background-size: cover, auto 125%;   /* foto con zoom 125% para poder recortar cielo */
     /* y al 100%: ancla la foto al fondo -> recorta mas cielo de arriba y SUBE
        a los novios en el cuadro. (Subir el 125% = mas zoom; mover el % = encuadre.) */
-    background-position: center, center 60%;  /* foto deslizada hacia abajo: recupera arriba, recorta abajo (jun 2026) */
+    background-position: center, center 75%;  /* foto deslizada hacia abajo: recupera arriba, recorta abajo (jun 2026) */
     background-repeat: no-repeat;
     border-radius: 0;   /* esquinas rectas (sin arco) */
     /* fade solo ABAJO: la foto se funde con el papel crema hacia la siguiente
