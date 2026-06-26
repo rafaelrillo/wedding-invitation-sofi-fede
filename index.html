@@ -861,7 +861,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .rsvp-form { margin-top: 30px; }
   /* /fiesta: oculta ceremonia + menú + alergias (invitados solo a la fiesta) */
   html[data-inv="fiesta"] #ceremonia { display: none; }
-  html[data-inv="fiesta"] .g-menu,
+  html[data-inv="fiesta"] .field:has(.g-menu),
   html[data-inv="fiesta"] .field:has(.g-allergies) { display: none; }
   /* horario del festejo: 18hs para cena, 21hs para fiesta */
   .ev-hour-fiesta { display: none; }
