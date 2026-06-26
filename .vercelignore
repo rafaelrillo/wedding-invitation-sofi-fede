@@ -16,10 +16,17 @@ index-respaldo-2026-05-22.html
 index.html.bak-washes
 .git
 .DS_Store
-# en draws solo se usan los .webp; el resto (fuentes JPEG, PNG intermedios, scripts) no
+# en draws: excluir JEPGs fuente, PNGs intermedios, y el script de proceso
+# los PNGs usados en producción (ceremonia-iglesia.png, festejo-salon.png) pasan
 assets/draws/*.jpeg
-assets/draws/*.png
 assets/draws/*.cjs
+assets/draws/iglesia-1.png
+assets/draws/iglesia-2.png
+assets/draws/iglesia-misa.png
+assets/draws/fiesta-draw.png
+assets/draws/saco-novio.png
+assets/draws/vestido-novia.png
+assets/draws/copas.png
 
 # material fuente del brief (no se deploya)
 _brief

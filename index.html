@@ -53,7 +53,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- SOFI & FEDE: tipografía del save the date — Parisienne (script firma, nombres)
      + Cormorant Garamond (serif elegante, títulos + itálica de acentos). -->
-<link href="https://fonts.googleapis.com/css2?family=Birthstone&family=Bona+Nova+SC:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400..700&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Parisienne&family=Playfair+Display+SC:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Beautifully+Delicias&family=Birthstone&family=Bona+Nova+SC:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400..700&family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Parisienne&family=Playfair+Display+SC:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400..700&display=swap" rel="stylesheet">
 
 <style>
   /* ============================================================
@@ -330,9 +330,9 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;   /* texto en la zona baja de la foto (sobre los cuerpos, no las caras) */
+    justify-content: center;
     text-align: center;
-    padding: 48px 30px calc(168px + 10vh + 260px);  /* todo el bloque (Nos casamos + nombres + fecha) subido ~260px para no tapar las caras (jun 2026) */
+    padding: 65px 30px 95px;
     overflow: hidden;
   }
   /* Decoracion floral del hero (composicion-2 en ambas esquinas top) */
@@ -364,17 +364,17 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .stop-flora-top   { top: 0px; left: 50%; transform: translateX(calc(-50% - 35px)); width: 255px; }
   .stop-flora-right { top: -10px; right: -60px; transform: scaleX(-1); width: 200px; }
 
-  .hero-eyebrow { margin-top: 20px; margin-bottom: 65px; }
+  .hero-eyebrow { margin-top: 20px; margin-bottom: 56px; }
   /* width controla el tamano del SVG (texto + arco). 290px ≈ +10% sobre 264.
      translateX corre "Nos casamos" a la derecha para centrarlo OPTICAMENTE con
      los nombres (que quedan apoyados a la derecha por los swashes de A y S). */
-  .eyebrow-arc { display: block; width: 290px; height: auto; margin: 0 auto; transform: translateX(14px); }
+  .eyebrow-arc { display: block; width: 290px; height: auto; margin: 0 auto; }
   .eyebrow-arc text {
     font-family: 'Cormorant Garamond', serif;
     font-size: 15px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    fill: var(--cream);
+    fill: var(--ink);
   }
   .hero-names {
     display: flex;
@@ -415,14 +415,14 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     font-family: 'Segatta', cursive;
     font-size: 120px;
     line-height: 1;
-    color: var(--cream);
+    color: var(--ink);
   }
   .rest {
     font-family: 'Segatta', cursive;
     font-size: 108px;
     letter-spacing: 0;
     text-transform: none;
-    color: var(--cream);
+    color: var(--ink);
   }
   /* "&" detras de los nombres (idea de la referencia ANA & FERNANDO):
      absoluto y centrado en el bloque de nombres. Tamano moderado: pisa
@@ -430,10 +430,10 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
      (z-index 1) quedan legibles encima y el & asoma en los huecos.
      text-align center para que el glifo quede bien centrado en su caja. */
   .hero-amp {
-    font-family: 'New Icon Script', cursive;
-    font-size: 53px;
+    font-family: 'Segatta', cursive;
+    font-size: 90px;
     line-height: 1;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--ink);
     align-self: center;
     text-align: center;
     z-index: 2;
@@ -500,17 +500,17 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    margin-top: 82px;
+    margin-top: 56px;
   }
   /* florcita watercolor como divisor arriba de la fecha (reemplaza la hairline).
      Chica y delicada para no competir con los nombres. Corrida +12px para
      alinearse con la fecha (mismo corrimiento optico). */
-  .hero-flower { width: 48px; height: auto; transform: translateX(12px); }
+  .hero-flower { width: 48px; height: auto; }
   .hero-date {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 34.8px;  /* +20% sobre 29px (jun 2026) */
+    font-size: 34.8px;
     letter-spacing: 0.16em;
-    color: var(--cream);
+    color: var(--ink);
     /* nowrap: la animacion dateFocusIn arranca con letter-spacing 0.5em (muy
        abierto). Sin esto, con ese espaciado la fecha se parte en 2 lineas (alto
        66px) y al cerrarse el espaciado vuelve a 1 (alto 33px): como el hero
@@ -521,41 +521,19 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
        centrada a la pagina pero los nombres se apoyan a la derecha, asi que
        quedaba corrida a la izquierda respecto al resto del hero.
        translateY(168px): baja SOLO la fecha (98px + 70px mas) (jun 2026). */
-    transform: translateX(12px) translateY(168px);
+    transform: none;
   }
-  /* FOTO DE FONDO del hero: capa absoluta con la foto + scrim (degradado
-     oscuro para legibilidad del texto) + borde superior en ARCO + fade abajo
-     que la funde con la siguiente seccion (crema).
-     El scrim es suave arriba (se ven las caras) y mas oscuro en la zona baja
-     (donde va el texto). Knobs: los % y opacidades del primer gradiente. */
-  .hero-media {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background:
-      linear-gradient(to bottom,
-        rgba(46,36,28,0.30) 0%,
-        rgba(46,36,28,0.30) 24%,
-        rgba(46,36,28,0.50) 46%,
-        rgba(46,36,28,0.60) 68%,
-        rgba(46,36,28,0.56) 86%,
-        rgba(46,36,28,0.00) 100%),
-      url('/assets/hero-palmeras.jpg');
-    background-size: cover, auto 125%;   /* foto con zoom 125% para poder recortar cielo */
-    /* y al 100%: ancla la foto al fondo -> recorta mas cielo de arriba y SUBE
-       a los novios en el cuadro. (Subir el 125% = mas zoom; mover el % = encuadre.) */
-    background-position: center, center 82%;  /* foto deslizada hacia abajo: recupera arriba, recorta abajo (jun 2026) */
-    background-repeat: no-repeat;
-    border-radius: 0;   /* esquinas rectas (sin arco) */
-    /* fade solo ABAJO: la foto se funde con el papel crema hacia la siguiente
-       seccion. Arriba va recto (sin fade). */
-    -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
-            mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  /* Hero sin foto: fondo papel (hereda del body). El div queda vacío. */
+  .hero-media { display: none; }
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(-15px);
   }
   /* el contenido del hero va POR ENCIMA de la foto */
   .hero-eyebrow, .hero-names, .hero-meta, .hero-scroll { position: relative; z-index: 1; }
-  /* sombra sutil para reforzar legibilidad del texto claro sobre la foto */
-  .hero-names, .hero-date, .hero-scroll { text-shadow: 0 1px 14px rgba(28,20,14,0.5); }
+  .hero-names, .hero-date, .hero-scroll { text-shadow: none; }
 
   /* "Segui el sendero" ahora en flujo (debajo de la foto), ya no absoluto. */
   .hero-scroll {
@@ -1320,23 +1298,25 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     <header class="hero" data-side="center">
       <!-- Foto de fondo del hero (arco arriba + fade abajo); el texto va encima. -->
       <div class="hero-media" aria-hidden="true"></div>
-      <div class="hero-eyebrow">
-        <svg class="eyebrow-arc" viewBox="0 0 280 112" aria-label="Nos casamos">
-          <path id="eyebrowArc" d="M 22 104 A 130 130 0 0 1 258 104" fill="none"></path>
-          <text><textPath href="#eyebrowArc" startOffset="50%" text-anchor="middle">Nos casamos</textPath></text>
-        </svg>
-      </div>
-      <h1 class="hero-names">
-        <span class="name-group">
-          <span class="name-row"><span class="ini">S</span><span class="rest">ofi</span></span>
-        </span>
-        <span class="hero-amp">&amp;</span>
-        <span class="name-group">
-          <span class="name-row"><span class="ini">F</span><span class="rest">ede</span></span>
-        </span>
-      </h1>
-      <div class="hero-meta">
-        <p class="hero-date">08 · 08 · 2026</p>
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <svg class="eyebrow-arc" viewBox="0 0 280 112" aria-label="Nos casamos">
+            <path id="eyebrowArc" d="M 22 104 A 130 130 0 0 1 258 104" fill="none"></path>
+            <text><textPath href="#eyebrowArc" startOffset="50%" text-anchor="middle">Nos casamos</textPath></text>
+          </svg>
+        </div>
+        <h1 class="hero-names">
+          <span class="name-group">
+            <span class="name-row"><span class="ini">S</span><span class="rest">ofi</span></span>
+          </span>
+          <span class="hero-amp">&amp;</span>
+          <span class="name-group">
+            <span class="name-row"><span class="ini">F</span><span class="rest">ede</span></span>
+          </span>
+        </h1>
+        <div class="hero-meta">
+          <p class="hero-date">08 · 08 · 2026</p>
+        </div>
       </div>
       <!-- "Segui el sendero" eliminado para la presentacion con el cliente (jun 2026).
            Para REACTIVAR: descomentar el bloque de abajo.
@@ -1378,7 +1358,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
       <div class="stop-body">
         <p class="kicker reveal">Dress code</p>
         <h2 class="dress-elegante reveal" style="text-transform: uppercase;">Elegante</h2>
-        <p class="copy reveal">El blanco y tonos similares son exclusivos<br/>para la novia.</p>
+        <p class="copy reveal">El blanco y tonos similares se reservan para la novia.</p>
       </div>
     </section>
 
@@ -1390,7 +1370,6 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
           <span class="photos-sumar">Si querés</span>
           <span class="photos-sub">hacernos un regalo</span>
         </h2>
-        <p class="stop-lead reveal">Tu presencia ya es el mejor regalo. Si igual querés sumar, acá están los datos.</p>
 
         <p class="bank-label reveal">En pesos</p>
         <div class="bank reveal">
@@ -1438,7 +1417,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
           <span class="song-mid">una <span class="song-word" style="text-transform: uppercase;">canción</span></span>
           <span class="photos-sub accent-italic">para la fiesta</span>
         </h2>
-        <p class="copy reveal">Sumá el tema que no puede faltar. La playlist la hacemos entre todos.</p>
+        <p class="copy reveal">La playlist la hacemos entre todos.</p>
         <div class="music-draws reveal"><img class="music-draw" src="/assets/draws/spotify-draw.webp" alt="Nota musical dibujada"></div>
         <form id="song-form" class="rsvp-form reveal" novalidate>
           <div class="field">
@@ -1449,7 +1428,6 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         </form>
         <div id="song-thanks" class="thanks" style="display:none;">
           <div class="ok">¡Anotada!</div>
-          <div class="sub">Va para la playlist de la fiesta.</div>
         </div>
       </div>
     </section>
@@ -1489,10 +1467,10 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
             <p class="guest-label">Invitado 1</p>
             <div class="field">
               <label for="name-1">Nombre completo</label>
-              <input id="name-1" class="g-name" type="text" placeholder="Tu nombre" autocomplete="name" required />
+              <input id="name-1" class="g-name" type="text" placeholder="Apellido y nombre" autocomplete="name" required />
             </div>
             <div class="field">
-              <label>¿Vas a venir?</label>
+              <label>Confirmación</label>
               <div class="radio-group g-attendance">
                 <label data-val="yes">Sí, voy</label>
                 <label data-val="no">No puedo</label>
@@ -1506,7 +1484,6 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
                 <label data-val="celiaco"><span class="mk"></span>Celíaco</label>
                 <label data-val="diabetico"><span class="mk"></span>Diabético</label>
               </div>
-              <p class="field-hint">Si no marcás nada, va el menú estándar.</p>
             </div>
             <div class="field">
               <label for="allergies-1">Alergias</label>
@@ -1521,7 +1498,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
               <input id="name-2" class="g-name" type="text" placeholder="Nombre del segundo invitado" autocomplete="name" />
             </div>
             <div class="field">
-              <label>¿Vas a venir?</label>
+              <label>Confirmación</label>
               <div class="radio-group g-attendance">
                 <label data-val="yes">Sí, voy</label>
                 <label data-val="no">No puedo</label>
@@ -1535,7 +1512,6 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
                 <label data-val="celiaco"><span class="mk"></span>Celíaco</label>
                 <label data-val="diabetico"><span class="mk"></span>Diabético</label>
               </div>
-              <p class="field-hint">Si no marcás nada, va el menú estándar.</p>
             </div>
             <div class="field">
               <label for="allergies-2">Alergias</label>
@@ -1548,7 +1524,6 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 
         <div id="thanks" class="thanks" style="display:none;">
           <div class="ok">¡Gracias!</div>
-          <div class="sub">Nos vemos el 08 de agosto.</div>
         </div>
       </div>
     </section>
@@ -1560,7 +1535,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
            Para REACTIVAR: descomentar la linea de abajo.
       -->
       <div class="stop-body">
-        <h2 class="stop-title reveal">Falta <span class="accent-italic">cada<br/>vez</span> menos</h2>
+        <h2 class="stop-title reveal"><span class="accent-italic">Cada<br/>vez</span> falta menos</h2>
         <p class="big-date reveal" aria-label="08 de agosto de 2026">08 · 08 · 26</p>
         <div class="count reveal" id="countdown">
           <div class="count-cell"><span class="count-num" data-cd="days">—</span><span class="count-lbl">Días</span></div>
