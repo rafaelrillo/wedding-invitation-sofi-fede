@@ -10,7 +10,7 @@
 <!-- Dos invitaciones, misma fuente: la raíz (/) es para invitados solos; /dos
      muestra el segundo bloque de invitado en Confirmación. El rewrite de
      vercel.json sirve /dos desde este mismo archivo; acá solo marcamos data-inv. -->
-<script>(function(){var p=location.pathname,s=location.search,d=document.documentElement;if(/(^|\/)dos\/?$/.test(p)||/[?&]dos\b/.test(s))d.setAttribute("data-inv","2");
+<script>(function(){var p=location.pathname,s=location.search,d=document.documentElement;if(/(^|\/)dos\/?$/.test(p)||/[?&]dos\b/.test(s))d.setAttribute("data-inv","2");if(/(^|\/)fiesta\/?$/.test(p)||/[?&]fiesta\b/.test(s))d.setAttribute("data-inv","fiesta");
 /* La seccion FOTOS recien tiene sentido el dia de la boda (album para subir
    fotos de la fiesta). Antes solo ocupa espacio -> se oculta hasta esa fecha.
    Se decide aca, en el <head>, para que el sendero ya mida sin esa seccion.
@@ -858,6 +858,15 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     margin-top: 10px;
   }
   .rsvp-form { margin-top: 30px; }
+  /* /fiesta: oculta ceremonia + menú + alergias (invitados solo a la fiesta) */
+  html[data-inv="fiesta"] #ceremonia { display: none; }
+  html[data-inv="fiesta"] .g-menu,
+  html[data-inv="fiesta"] .field:has(.g-allergies) { display: none; }
+  /* horario del festejo: 18hs para cena, 21hs para fiesta */
+  .ev-hour-fiesta { display: none; }
+  html[data-inv="fiesta"] .ev-hour-cena { display: none; }
+  html[data-inv="fiesta"] .ev-hour-fiesta { display: block; }
+
   /* Dos invitados (link /dos): el 2º bloque y las etiquetas "Invitado N"
      solo aparecen con html[data-inv="2"]. En el link singular queda 1 solo. */
   .guest[data-guest="2"] { display: none; }
@@ -1359,7 +1368,8 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         <p class="ev-venue reveal" style="color: var(--ink);">La<br/>Arboleda</p>
         <p class="ev-address reveal">Dirección a confirmar</p>
         <span class="ev-divider reveal"></span>
-        <p class="ev-hour reveal">18:00 hs</p>
+        <p class="ev-hour reveal ev-hour-cena">18:00 hs</p>
+        <p class="ev-hour reveal ev-hour-fiesta">21:00 hs</p>
         <a href="https://maps.app.goo.gl/cFaGeMvU2K2TuwwF7" target="_blank" rel="noopener" class="btn reveal">Cómo llegar al salón</a>
       </div>
     </section>
@@ -2103,8 +2113,9 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
           alergias:   (g.querySelector('.g-allergies').value || '').trim()
         };
       });
-      // "Invitacion": x1 = invitación individual (/), x2 = invitación doble (/dos).
-      var invitacion = document.documentElement.getAttribute('data-inv') === '2' ? 'x2' : 'x1';
+      // "Invitacion": x1 / x2 / x1-fiesta según la ruta.
+      var inv = document.documentElement.getAttribute('data-inv');
+      var invitacion = inv === '2' ? 'x2' : inv === 'fiesta' ? 'x1-fiesta' : 'x1';
       postToSheet({ type: 'rsvp', guests: guests, link: invitacion });
 
       form.style.display = 'none';

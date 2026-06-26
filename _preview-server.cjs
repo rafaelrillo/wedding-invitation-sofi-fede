@@ -8,7 +8,7 @@ const MIME = { '.html':'text/html; charset=utf-8', '.css':'text/css', '.js':'tex
   '.svg':'image/svg+xml', '.ico':'image/x-icon' };
 http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]);
-  if (p === '/' || p === '/dos' || p === '/dos/') p = '/index.html';   // rewrite como Vercel
+  if (p === '/' || p === '/dos' || p === '/dos/' || p === '/fiesta' || p === '/fiesta/') p = '/index.html';   // rewrite como Vercel
   const file = path.join(ROOT, p);
   if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
     res.writeHead(404); return res.end('404');

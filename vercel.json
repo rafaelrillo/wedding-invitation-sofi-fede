@@ -1,6 +1,8 @@
 {
   "rewrites": [
-    { "source": "/dos", "destination": "/index.html" },
-    { "source": "/dos/", "destination": "/index.html" }
+    { "source": "/dos",    "destination": "/index.html" },
+    { "source": "/dos/",   "destination": "/index.html" },
+    { "source": "/fiesta", "destination": "/index.html" },
+    { "source": "/fiesta/","destination": "/index.html" }
   ]
 }
