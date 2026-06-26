@@ -364,7 +364,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .stop-flora-top   { top: 0px; left: 50%; transform: translateX(calc(-50% - 35px)); width: 255px; }
   .stop-flora-right { top: -10px; right: -60px; transform: scaleX(-1); width: 200px; }
 
-  .hero-eyebrow { margin-top: -10px; margin-bottom: 65px; }
+  .hero-eyebrow { margin-top: 20px; margin-bottom: 65px; }
   /* width controla el tamano del SVG (texto + arco). 290px ≈ +10% sobre 264.
      translateX corre "Nos casamos" a la derecha para centrarlo OPTICAMENTE con
      los nombres (que quedan apoyados a la derecha por los swashes de A y S). */
@@ -380,7 +380,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 80px;
+    gap: 30px;
     line-height: 1;
     position: relative;
     font-weight: 400;
@@ -396,8 +396,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
      centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
-  .hero-names .name-group:first-of-type { transform: translateY(0); }
-  .hero-names .name-group:last-of-type  { transform: translateY(0); }
+  .hero-names .name-group:last-of-type  { margin-top: -20px; }
   /* nombres: inicial en script + resto del nombre en serif mayuscula.
      Sin escalon (translateX): el swash de la A script es ancho y el
      .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
@@ -435,10 +434,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     font-size: 53px;
     line-height: 1;
     color: rgba(255, 255, 255, 0.65);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(calc(-50% + 23px), -50%);
+    align-self: center;
     text-align: center;
     z-index: 2;
     pointer-events: none;
@@ -473,14 +469,14 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   /* arranque (clase .anim, la agrega el JS): se oculta todo para la entrada */
   .hero-names.anim .ini,
   .hero-names.anim .rest { opacity: 0; transform: translateY(12px); }
-  .hero-names.anim .hero-amp { opacity: 0; transform: translate(calc(-50% + 23px), -50%) scale(.88); }
+  .hero-names.anim .hero-amp { opacity: 0; transform: scale(.88); }
 
   /* cada nombre entra al agregarse .show (JS, escalonado) */
   .hero-names.anim .ini.show,
   .hero-names.anim .rest.show { opacity: 1; transform: none; }
   /* el "&" entra con fundido + leve escala (mantiene su nudge optico +23px) */
   .hero-names.anim.amp-in .hero-amp {
-    opacity: 1; transform: translate(calc(-50% + 23px), -50%) scale(1);
+    opacity: 1; transform: scale(1);
     transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1);
   }
 
@@ -548,7 +544,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     background-size: cover, auto 125%;   /* foto con zoom 125% para poder recortar cielo */
     /* y al 100%: ancla la foto al fondo -> recorta mas cielo de arriba y SUBE
        a los novios en el cuadro. (Subir el 125% = mas zoom; mover el % = encuadre.) */
-    background-position: center, center 75%;  /* foto deslizada hacia abajo: recupera arriba, recorta abajo (jun 2026) */
+    background-position: center, center 82%;  /* foto deslizada hacia abajo: recupera arriba, recorta abajo (jun 2026) */
     background-repeat: no-repeat;
     border-radius: 0;   /* esquinas rectas (sin arco) */
     /* fade solo ABAJO: la foto se funde con el papel crema hacia la siguiente
@@ -1212,7 +1208,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     .reveal { opacity: 1; transform: none; transition: none; }
     /* hero: nombres y "&" visibles y en su lugar, sin animacion */
     .ini, .rest, .hero-amp { opacity: 1 !important; transform: none !important; }
-    .hero-amp { transform: translate(calc(-50% + 23px), -50%) !important; }
+    .hero-amp { transform: none !important; }
     .stop-wash { transition: opacity .4s ease; }
     /* hero: sin animaciones de entrada, todo visible y en su lugar */
     .hero-eyebrow, .hero-date, .hero-scroll, .hero-scroll span {
@@ -1685,7 +1681,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
       agusIni.style.setProperty('--ink', 100);
       santiIni.style.setProperty('--ink', 100);
       gsap.set([agusRest, santiRest], { opacity: 0, y: 14 });
-      gsap.set(amp, { xPercent: -50, yPercent: -50, x: 23, opacity: 0, scale: 0.9 });
+      gsap.set(amp, { opacity: 0, scale: 0.9 });
 
       // La timeline ARRANCA recien cuando la fuente real (New Icon Script/Serif)
       // termino de cargar: asi los nombres jamas se dibujan con la fuente de
