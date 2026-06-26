@@ -364,7 +364,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .stop-flora-top   { top: 0px; left: 50%; transform: translateX(calc(-50% - 35px)); width: 255px; }
   .stop-flora-right { top: -10px; right: -60px; transform: scaleX(-1); width: 200px; }
 
-  .hero-eyebrow { margin-top: -33px; margin-bottom: 6px; }
+  .hero-eyebrow { margin-top: -33px; margin-bottom: 65px; }
   /* width controla el tamano del SVG (texto + arco). 290px ≈ +10% sobre 264.
      translateX corre "Nos casamos" a la derecha para centrarlo OPTICAMENTE con
      los nombres (que quedan apoyados a la derecha por los swashes de A y S). */
@@ -396,8 +396,8 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
      centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
-  .hero-names .name-group:first-of-type { transform: translateY(-10px); }
-  .hero-names .name-group:last-of-type  { transform: translateY(10px); }
+  .hero-names .name-group:first-of-type { transform: translateY(-65px); }
+  .hero-names .name-group:last-of-type  { transform: translateY(15px); }
   /* nombres: inicial en script + resto del nombre en serif mayuscula.
      Sin escalon (translateX): el swash de la A script es ancho y el
      .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
@@ -436,7 +436,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     line-height: 1;
     color: rgba(255, 255, 255, 0.65);
     position: absolute;
-    top: 50%;
+    top: 65%;
     left: 50%;
     transform: translate(calc(-50% + 23px), -50%);
     text-align: center;
