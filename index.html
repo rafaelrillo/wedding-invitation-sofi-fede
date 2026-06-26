@@ -198,7 +198,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
      ============================================================ */
   .stop {
     position: relative;
-    padding: 48px 26px;
+    padding: 64px 26px;
   }
   .stop-body { max-width: 308px; }
   .stop[data-side="left"]  .stop-body { margin-right: auto; }
@@ -364,7 +364,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .stop-flora-top   { top: 0px; left: 50%; transform: translateX(calc(-50% - 35px)); width: 255px; }
   .stop-flora-right { top: -10px; right: -60px; transform: scaleX(-1); width: 200px; }
 
-  .hero-eyebrow { margin-top: -33px; margin-bottom: 6px; }
+  .hero-eyebrow { margin-top: -33px; margin-bottom: 65px; }
   /* width controla el tamano del SVG (texto + arco). 290px ≈ +10% sobre 264.
      translateX corre "Nos casamos" a la derecha para centrarlo OPTICAMENTE con
      los nombres (que quedan apoyados a la derecha por los swashes de A y S). */
@@ -396,8 +396,8 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
      centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
-  .hero-names .name-group:first-of-type { transform: translateY(-10px); }
-  .hero-names .name-group:last-of-type  { transform: translateY(10px); }
+  .hero-names .name-group:first-of-type { transform: translateY(-65px); }
+  .hero-names .name-group:last-of-type  { transform: translateY(49px); }
   /* nombres: inicial en script + resto del nombre en serif mayuscula.
      Sin escalon (translateX): el swash de la A script es ancho y el
      .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
@@ -431,19 +431,16 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
      (z-index 1) quedan legibles encima y el & asoma en los huecos.
      text-align center para que el glifo quede bien centrado en su caja. */
   .hero-amp {
-    font-family: 'Segatta', cursive;
-    font-size: 132px;
+    font-family: 'New Icon Script', cursive;
+    font-size: 53px;
     line-height: 1;
-    color: rgba(255, 255, 255, 0.45);  /* blanco translucido sobre la foto */
+    color: rgba(255, 255, 255, 0.65);
     position: absolute;
     top: 50%;
     left: 50%;
-    /* corrido ~10px a la derecha: el rulito del glifo script sale a la
-       izquierda y hace que la letra PAREZCA descentrada; este nudge la
-       compensa opticamente. */
     transform: translate(calc(-50% + 23px), -50%);
     text-align: center;
-    z-index: 0;
+    z-index: 2;
     pointer-events: none;
   }
   /* ===== ENTRADA de los nombres: fundido + leve subida =====
@@ -638,7 +635,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
        inicio del texto). */
     text-indent: 0.22em;
     text-transform: uppercase;
-    color: var(--ink-soft);
+    color: var(--terra);
     margin-top: 4px;
   }
 
@@ -659,14 +656,18 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     right: -16px;
     top: 50%;
     transform: translateY(-50%);
-    height: 207px;   /* -10% sobre 230 (jun 2026) */
+    height: 248px;
     width: auto;
     z-index: 0;
     opacity: 0.7;
     pointer-events: none;
   }
   /* la iglesia (misa) un poco mas tenue que la fiesta (jun 2026) */
-  .misa-draw { opacity: 0.5; }
+  .misa-draw { opacity: 0.5; height: 274px; }
+  .fiesta-draw {
+    -webkit-mask-image: radial-gradient(ellipse 72% 62% at 62% 50%, black 18%, transparent 75%);
+    mask-image: radial-gradient(ellipse 72% 62% at 62% 50%, black 18%, transparent 75%);
+  }
 
   /* nombre del lugar: New Icon Serif CONDENSED grande (62px), MAYUS. Es el
      elemento focal de la parada. La condensada permite el cuerpo grande sin
@@ -930,6 +931,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .field input::placeholder, .field textarea::placeholder {
     color: var(--line-strong);
     font-style: italic;
+    font-size: 11px;
   }
   .radio-group { display: flex; gap: 10px; }
   .radio-group label {
@@ -1176,9 +1178,9 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     color: var(--cream);
   }
   .foot-names .f-amp {
-    font-family: 'Segatta', cursive;
-    font-size: 46px;   /* +20% (jun 2026) */
-    color: rgba(255, 255, 255, 0.45);  /* blanco translucido, igual que el "&" del hero */
+    font-family: 'New Icon Script', cursive;
+    font-size: 39px;
+    color: rgba(255, 255, 255, 0.65);
   }
   .foot-date {
     font-family: 'Cormorant Garamond', serif;
@@ -1225,15 +1227,16 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .kicker, .note-k, .dress-k, .bank-k, .count-lbl,
   #rsvp-form .field > label, #msg-form .field > label, .field label, .btn{ font-weight:600; }
   .copy, .note-v, .bank-note p, .field-hint, .char-count{ font-weight:400; }
-  .ev-venue{ font-size:48px; }
-  .dress-elegante{ font-size:52px; }
-  .photos-title .photos-sumar{ font-size:52px; }
-  .photos-title .song-mid{ font-size:38px; }
+  .ev-venue{ font-size:41px; }
+  .dress-elegante{ font-size:44px; }
+  .photos-title .photos-sumar{ font-size:44px; }
+  .photos-title .photos-sub{ font-size:26px; }
+  .photos-title .song-mid{ font-size:32px; }
   html[data-op="1"]{ --font-title:'Playfair Display SC', Georgia, serif; }
-  html[data-op="1"] .ev-venue{ text-transform:none; font-size:52px; }
+  html[data-op="1"] .ev-venue{ text-transform:none; font-size:44px; }
   html[data-op="1"] .song-word{ text-transform:none; }
   html[data-op="2"]{ --font-title:'Cormorant Garamond', Georgia, serif; }
-  html[data-op="2"] .ev-venue{ text-transform:none; font-size:54px; }
+  html[data-op="2"] .ev-venue{ text-transform:none; font-size:46px; }
   html[data-op="2"] .song-word{ text-transform:none; }
   html[data-op="3"]{ --font-title:'Source Serif 4', Georgia, serif; }
   html[data-op="3"] .ev-venue{ font-size:40px; }
@@ -1349,27 +1352,27 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 
     <!-- ============ ii · LA MISA ============ -->
     <section class="stop" data-side="left" id="ceremonia">
-      <img class="misa-draw" src="/assets/draws/ceremonia-iglesia.jpg" alt="Ilustración de la capilla" aria-hidden="true">
+      <img class="misa-draw" src="/assets/draws/ceremonia-iglesia.png" alt="Ilustración de la capilla" aria-hidden="true">
       <div class="stop-body">
         <p class="kicker reveal">Ceremonia</p>
-        <p class="ev-venue reveal" style="color: var(--ink);">Capilla<br/>Nuestra Señora<br/>del Carmen</p>
-        <p class="ev-address reveal">Universidad San Pablo · Solano Vera, T4129</p>
+        <p class="ev-venue reveal" style="color: var(--ink); text-transform: uppercase; white-space: nowrap;">Capilla<br/>Nuestra Sra.<br/>del Carmen</p>
+        <p class="ev-address reveal">Universidad San Pablo · Solano Vera</p>
         <span class="ev-divider reveal"></span>
-        <p class="ev-hour reveal">16:30 hs</p>
+        <p class="ev-hour reveal">16:30 <span style="font-size:0.9em">hs</span></p>
         <a href="https://maps.app.goo.gl/XRt4R1zVuYXvVCHK8" target="_blank" rel="noopener" class="btn reveal">Cómo llegar a la capilla</a>
       </div>
     </section>
 
     <!-- ============ iii · LA FIESTA ============ -->
     <section class="stop" data-side="left" id="festejo">
-      <img class="fiesta-draw" src="/assets/draws/festejo-salon.jpg" alt="Ilustración del salón" aria-hidden="true">
+      <img class="fiesta-draw" src="/assets/draws/festejo-salon.png" alt="Ilustración del salón" aria-hidden="true">
       <div class="stop-body">
         <p class="kicker reveal">Festejo</p>
-        <p class="ev-venue reveal" style="color: var(--ink);">La<br/>Arboleda</p>
-        <p class="ev-address reveal">Dirección a confirmar</p>
+        <p class="ev-venue reveal" style="color: var(--ink); text-transform: uppercase;">La<br/>Arboleda</p>
+        <p class="ev-address reveal">Av. Solano Vera, Km. 5</p>
         <span class="ev-divider reveal"></span>
-        <p class="ev-hour reveal ev-hour-cena">18:00 hs</p>
-        <p class="ev-hour reveal ev-hour-fiesta">21:00 hs</p>
+        <p class="ev-hour reveal ev-hour-cena">18:00 <span style="font-size:0.9em">hs</span></p>
+        <p class="ev-hour reveal ev-hour-fiesta">21:00 <span style="font-size:0.9em">hs</span></p>
         <a href="https://maps.app.goo.gl/cFaGeMvU2K2TuwwF7" target="_blank" rel="noopener" class="btn reveal">Cómo llegar al salón</a>
       </div>
     </section>
@@ -1378,7 +1381,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     <section class="stop" data-side="left" style="padding-bottom: 32px;">
       <div class="stop-body">
         <p class="kicker reveal">Dress code</p>
-        <h2 class="dress-elegante reveal">Elegante</h2>
+        <h2 class="dress-elegante reveal" style="text-transform: uppercase;">Elegante</h2>
         <p class="copy reveal">El blanco y tonos similares son exclusivos<br/>para la novia.</p>
       </div>
     </section>
@@ -1387,7 +1390,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     <section class="stop" data-side="left">
       <div class="stop-body">
         <p class="kicker reveal">Regalos</p>
-        <h2 class="stop-title reveal photos-title">
+        <h2 class="stop-title reveal photos-title" style="text-transform: uppercase;">
           <span class="photos-sumar">Si querés</span>
           <span class="photos-sub">hacernos un regalo</span>
         </h2>
@@ -1434,9 +1437,9 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
       <span class="stop-wash wash-gold"></span>
       <div class="stop-body">
         <p class="kicker reveal">Playlist</p>
-        <h2 class="stop-title reveal photos-title">
+        <h2 class="stop-title reveal photos-title" style="text-transform: uppercase;">
           <span class="photos-sumar">Sugerí</span>
-          <span class="song-mid">una <span class="song-word">canción</span></span>
+          <span class="song-mid">una <span class="song-word" style="text-transform: uppercase;">canción</span></span>
           <span class="photos-sub accent-italic">para la fiesta</span>
         </h2>
         <p class="copy reveal">Sumá el tema que no puede faltar. La playlist la hacemos entre todos.</p>
@@ -1476,7 +1479,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
       <div class="stop-body">
         <p class="kicker reveal">Confirmación</p>
         <div class="reveal">
-          <h2 class="stop-title photos-title">
+          <h2 class="stop-title photos-title" style="text-transform: uppercase;">
             <span class="photos-sumar">Confirmá</span>
             <span class="photos-sub">tu presencia</span>
           </h2>
@@ -1578,7 +1581,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
       <div class="foot-media" aria-hidden="true"></div>
       <div class="foot-names reveal"><span class="f-ini">S</span><span class="f-rest">ofi</span> <span class="f-amp">&amp;</span> <span class="f-ini">F</span><span class="f-rest">ede</span></div>
       <div class="foot-date reveal">08 · 08 · 2026</div>
-      <p class="foot-closing reveal">Nos vemos en el gran día</p>
+      <p class="foot-closing reveal" style="font-weight: 400; text-shadow: none;">Nos vemos en el gran día</p>
       <div class="foot-mark reveal"></div>
     </footer>
 
