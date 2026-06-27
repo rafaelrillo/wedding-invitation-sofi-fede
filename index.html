@@ -2242,10 +2242,14 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   function startAudio() {
     audio.play().catch(function () {});
   }
-  /* scroll no cuenta como gesto de usuario en desktop ni iOS → se agrega
-     pointerdown/touchend que sí desbloquean el contexto de audio */
-  ['pointerdown', 'touchend', 'click', 'keydown'].forEach(function (evt) {
-    document.addEventListener(evt, startAudio, { capture: true, once: true, passive: true });
+  /* Intentar autoplay directo: funciona en Chrome/Android si el usuario ya
+     interactuó con el dominio antes. iOS Safari lo bloquea siempre.
+     Si falla, escuchar touchstart (dispara al apoyar el dedo, antes del scroll)
+     para que la música arranque con el primer gesto sin que el usuario note nada. */
+  audio.play().catch(function () {
+    ['touchstart', 'pointerdown', 'click', 'keydown'].forEach(function (evt) {
+      document.addEventListener(evt, startAudio, { capture: true, once: true, passive: true });
+    });
   });
 })();
 </script>
