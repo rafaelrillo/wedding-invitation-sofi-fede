@@ -355,18 +355,31 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   .hero-flora-left  { left: -50px; }
   .hero-flora-right { right: -50px; transform: scaleX(-1); }
-  .hero-flora-overlay {
+  .hero-flora-orquideas {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
+    top: 0;
+    left: 0;
+    width: 38%;
+    height: auto;
     pointer-events: none;
     z-index: 0;
+    mix-blend-mode: multiply;
     animation: heroFloraIn 1.6s ease 0.4s both;
-    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to left, black 75%, transparent 100%);
+    mask-image: linear-gradient(to left, black 75%, transparent 100%);
+  }
+  .hero-flora-rama {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 38%;
+    height: auto;
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: multiply;
+    animation: heroFloraIn 1.6s ease 0.4s both;
+    -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%);
+    mask-image: linear-gradient(to right, black 75%, transparent 100%);
   }
   @keyframes heroFloraIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -384,7 +397,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .stop-flora-top   { top: 0px; left: 50%; transform: translateX(calc(-50% - 35px)); width: 255px; }
   .stop-flora-right { top: -10px; right: -60px; transform: scaleX(-1); width: 200px; }
 
-  .hero-eyebrow { margin-top: 20px; margin-bottom: 56px; }
+  .hero-eyebrow { margin-top: 62px; margin-bottom: 56px; }
   /* width controla el tamano del SVG (texto + arco). 290px ≈ +10% sobre 264.
      translateX corre "Nos casamos" a la derecha para centrarlo OPTICAMENTE con
      los nombres (que quedan apoyados a la derecha por los swashes de A y S). */
@@ -400,10 +413,11 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 44px;
+    gap: 16px;
     line-height: 1;
     position: relative;
     font-weight: 400;
+    margin-top: -42px;
   }
   /* cada novio: nombre + apellido apilados */
   .name-group {
@@ -416,7 +430,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
      centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
-  .hero-names .name-group:last-of-type  { margin-top: 0; }
+  .hero-names .name-group:last-of-type  { margin-top: -26px; }
   /* nombres: inicial en script + resto del nombre en serif mayuscula.
      Sin escalon (translateX): el swash de la A script es ancho y el
      .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
@@ -454,6 +468,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     font-size: 140px;
     line-height: 0.8;
     color: var(--ink);
+    opacity: 0.45;
     align-self: center;
     text-align: center;
     z-index: 2;
@@ -497,7 +512,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   .hero-names.anim .rest.show { opacity: 1; transform: none; }
   /* el "&" entra con fundido + leve escala (mantiene su nudge optico +23px) */
   .hero-names.anim.amp-in .hero-amp {
-    opacity: 1; transform: scale(1);
+    opacity: 0.45; transform: scale(1);
     transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1);
   }
 
@@ -1159,22 +1174,23 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   /* nombres 50px mas arriba. Va con .reveal.in porque esa clase (animacion de
      entrada) setea transform:none y pisaria un transform puesto en .foot-names
      sola; este selector tiene mas especificidad y gana (jun 2026). */
-  .foot-names.reveal.in { transform: translateY(-40px); }
+  .foot-names.reveal.in { transform: translateY(-160px); }
   .foot-names .f-ini {
     font-family: 'Segatta', cursive;
-    font-size: 55px;
+    font-size: 90px;
     color: var(--cream);
   }
   .foot-names .f-rest {
     font-family: 'Segatta', cursive;
-    font-size: 50px;
+    font-size: 82px;
     letter-spacing: 0;
     text-transform: none;
     color: var(--cream);
   }
   .foot-names .f-amp {
-    font-family: 'New Icon Script', cursive;
-    font-size: 39px;
+    font-family: 'Velvet Hammer', cursive;
+    font-size: 96px;
+    line-height: 0.8;
     color: rgba(255, 255, 255, 0.65);
   }
   .foot-date {
@@ -1320,7 +1336,8 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
       <!-- Foto de fondo del hero (arco arriba + fade abajo); el texto va encima. -->
       <div class="hero-media" aria-hidden="true"></div>
       <!-- Composición floral FyS: orquídeas arriba-izq + rama abajo-der (igual al save the date) -->
-      <img class="hero-flora-overlay" src="/assets/fondo-fys.png" alt="" aria-hidden="true">
+      <img class="hero-flora-orquideas" src="/assets/flores-orquideas.png" alt="" aria-hidden="true">
+      <img class="hero-flora-rama" src="/assets/flores-rama.png" alt="" aria-hidden="true">
       <div class="hero-content">
         <div class="hero-eyebrow">
           <svg class="eyebrow-arc" viewBox="0 0 280 112" aria-label="Nos casamos">
@@ -1699,7 +1716,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
               onUpdate: function () { agusIni.style.setProperty('--ink', aInk.v); } }, 0.35)
           .to(agusRest, { opacity: 1, y: 0, duration: 0.5 }, 0.78)
         // "&"
-          .to(amp, { opacity: 1, scale: 1, duration: 0.7 }, 1.18)
+          .to(amp, { opacity: 0.45, scale: 1, duration: 0.7 }, 1.18)
         // Santi: la "S" entinta -> "anti" sube
           .to(sInk, { v: 0, duration: 0.65, ease: 'power1.inOut',
               onUpdate: function () { santiIni.style.setProperty('--ink', sInk.v); } }, 1.5)
