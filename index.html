@@ -2231,5 +2231,24 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
 })();
 </script>
+
+<!-- Música de fondo: Take On Me (A-ha, MTV Unplugged).
+     Trigger en primer scroll o tap — no autoplay (política iOS Safari). -->
+<audio id="bg-audio" src="/assets/take-on-me.mp3" loop preload="auto"></audio>
+<script>
+(function () {
+  var audio = document.getElementById('bg-audio');
+  if (!audio) return;
+  function startAudio() {
+    audio.play().catch(function () {});
+  }
+  /* scroll no cuenta como gesto de usuario en desktop ni iOS → se agrega
+     pointerdown/touchend que sí desbloquean el contexto de audio */
+  ['pointerdown', 'touchend', 'click', 'keydown'].forEach(function (evt) {
+    document.addEventListener(evt, startAudio, { capture: true, once: true, passive: true });
+  });
+})();
+</script>
+
 </body>
 </html>
