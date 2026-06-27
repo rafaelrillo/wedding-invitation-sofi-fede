@@ -2235,47 +2235,31 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 </script>
 
 <!-- Música de fondo: Take On Me (A-ha, MTV Unplugged).
-     Arranca cuando el "&" del hero termina de animar (~2s tras carga).
-     En iOS Safari se necesita un gesto previo: touchstart (incluso de scroll)
-     desbloquea el AudioContext; cuando llega la señal del "&", play() ya puede. -->
+     Intenta arrancar cuando el "&" termina de animar (señal GSAP ~2s).
+     En browsers que bloquean autoplay: arranca en el primer gesto del usuario. -->
 <audio id="bg-audio" src="/assets/take-on-me.mp3" loop preload="auto"></audio>
 <script>
 (function () {
   var audio = document.getElementById('bg-audio');
   if (!audio) return;
+  var played = false;
 
-  var unlocked = false;
-  var ampDone  = false;
-
-  function tryPlay() { audio.play().catch(function () {}); }
-
-  /* Paso 1: primer touchstart (incluso de scroll) desbloquea el AudioContext.
-     iOS Safari: touchstart SÍ desbloquea AudioContext aunque el gesto sea scroll.
-     HTMLAudioElement.play() solo necesita AudioContext desbloqueado previo. */
-  function onGesture() {
-    if (unlocked) return;
-    unlocked = true;
-    try {
-      var ctx = new (window.AudioContext || window.webkitAudioContext)();
-      ctx.resume().then(function () {
-        var buf = ctx.createBuffer(1, 1, 22050);
-        var src = ctx.createBufferSource();
-        src.buffer = buf; src.connect(ctx.destination); src.start(0);
-      });
-    } catch (e) {}
-    if (ampDone) tryPlay();
+  function tryPlay() {
+    if (played) return;
+    audio.play().then(function () { played = true; }).catch(function () {});
   }
+
+  /* Listeners persistentes (sin once) — se quedan hasta que played=true.
+     Cada gesto del usuario intenta play() en contexto de gesto (seguro en iOS/Android). */
+  function onGesture() { tryPlay(); }
   ['touchstart', 'pointerdown', 'click', 'keydown'].forEach(function (evt) {
-    document.addEventListener(evt, onGesture, { capture: true, passive: true, once: true });
+    document.addEventListener(evt, onGesture, { capture: true, passive: true });
   });
 
-  /* Paso 2: el timeline GSAP (o el fallback CSS) llama esta función cuando
-     el "&" termina de aparecer. Si ya había gesto → play inmediato.
-     Si no → play en cuanto llegue el primer toque. */
-  window.__bgAudioReady = function () {
-    ampDone = true;
-    tryPlay();  // funciona si ya hay unlock, o si Chrome/Android permite autoplay
-  };
+  /* El timeline GSAP llama esta función cuando el "&" termina (~2s).
+     En Android/Chrome y visitas repetidas puede arrancar aquí sin gesto.
+     En iOS primera visita: el primer toque posterior arranca la música. */
+  window.__bgAudioReady = function () { tryPlay(); };
 })();
 </script>
 
