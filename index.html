@@ -1717,6 +1717,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
           .to(agusRest, { opacity: 1, y: 0, duration: 0.5 }, 0.78)
         // "&"
           .to(amp, { opacity: 0.45, scale: 1, duration: 0.7 }, 1.18)
+          .call(function () { if (window.__bgAudioReady) window.__bgAudioReady(); }, null, 1.88)
         // Santi: la "S" entinta -> "anti" sube
           .to(sInk, { v: 0, duration: 0.65, ease: 'power1.inOut',
               onUpdate: function () { santiIni.style.setProperty('--ink', sInk.v); } }, 1.5)
@@ -1744,6 +1745,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         }, 650 + i * 500);  // Agus, luego Santi
       });
       setTimeout(function () { heroNames.classList.add('amp-in'); }, 1750);
+      setTimeout(function () { if (window.__bgAudioReady) window.__bgAudioReady(); }, 2550);
     }
   }
 
@@ -2233,24 +2235,47 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 </script>
 
 <!-- Música de fondo: Take On Me (A-ha, MTV Unplugged).
-     Trigger en primer scroll o tap — no autoplay (política iOS Safari). -->
+     Arranca cuando el "&" del hero termina de animar (~2s tras carga).
+     En iOS Safari se necesita un gesto previo: touchstart (incluso de scroll)
+     desbloquea el AudioContext; cuando llega la señal del "&", play() ya puede. -->
 <audio id="bg-audio" src="/assets/take-on-me.mp3" loop preload="auto"></audio>
 <script>
 (function () {
   var audio = document.getElementById('bg-audio');
   if (!audio) return;
-  function startAudio() {
-    audio.play().catch(function () {});
+
+  var unlocked = false;
+  var ampDone  = false;
+
+  function tryPlay() { audio.play().catch(function () {}); }
+
+  /* Paso 1: primer touchstart (incluso de scroll) desbloquea el AudioContext.
+     iOS Safari: touchstart SÍ desbloquea AudioContext aunque el gesto sea scroll.
+     HTMLAudioElement.play() solo necesita AudioContext desbloqueado previo. */
+  function onGesture() {
+    if (unlocked) return;
+    unlocked = true;
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      ctx.resume().then(function () {
+        var buf = ctx.createBuffer(1, 1, 22050);
+        var src = ctx.createBufferSource();
+        src.buffer = buf; src.connect(ctx.destination); src.start(0);
+      });
+    } catch (e) {}
+    if (ampDone) tryPlay();
   }
-  /* Intentar autoplay directo: funciona en Chrome/Android si el usuario ya
-     interactuó con el dominio antes. iOS Safari lo bloquea siempre.
-     Si falla, escuchar touchstart (dispara al apoyar el dedo, antes del scroll)
-     para que la música arranque con el primer gesto sin que el usuario note nada. */
-  audio.play().catch(function () {
-    ['touchstart', 'pointerdown', 'click', 'keydown'].forEach(function (evt) {
-      document.addEventListener(evt, startAudio, { capture: true, once: true, passive: true });
-    });
+  ['touchstart', 'pointerdown', 'click', 'keydown'].forEach(function (evt) {
+    document.addEventListener(evt, onGesture, { capture: true, passive: true, once: true });
   });
+
+  /* Paso 2: el timeline GSAP (o el fallback CSS) llama esta función cuando
+     el "&" termina de aparecer. Si ya había gesto → play inmediato.
+     Si no → play en cuanto llegue el primer toque. */
+  window.__bgAudioReady = function () {
+    ampDone = true;
+    tryPlay();  // funciona si ya hay unlock, o si Chrome/Android permite autoplay
+  };
 })();
 </script>
 
