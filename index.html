@@ -45,6 +45,8 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 <link rel="preload" href="/fonts/NewIconScript-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/NewIconSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/NewIconSerif-Condensed.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/Segatta.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/VelvetHammer.woff" as="font" type="font/woff" crossorigin>
 
 <!-- Cortex genera tokens.css: paleta calida + rampas tonales por hue. -->
 <link rel="stylesheet" href="/tokens.css">
@@ -141,6 +143,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     /* PERF/RESPONSIVE (jun 2026): antes era width:390px fijo -> en celulares mas
        anchos (430px) quedaban bandas del fondo a los costados. Ahora llena el
        ancho del celular (100%) con tope en desktop. */
+    container-type: inline-size;
     width: 100%;
     max-width: 480px;
     margin: 0 auto;
@@ -428,9 +431,9 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     position: relative;
     z-index: 1;
   }
-  /* separar los nombres del centro: Agus sube 5px, Santi baja 5px (el & queda
-     centrado entre los dos y asoma un poco mas). transform no afecta el flujo. */
-  .hero-names .name-group:last-of-type  { margin-top: -26px; }
+  /* & equidistante: mismo gap neto (0px) arriba y abajo del signo.
+     gap:16 + margin-top:-16 (en &) = 0 arriba; gap:16 + margin-bottom:-16 (en &) = 0 abajo. */
+  .hero-names .name-group:last-of-type  { margin-top: 0; }
   /* nombres: inicial en script + resto del nombre en serif mayuscula.
      Sin escalon (translateX): el swash de la A script es ancho y el
      .stage tiene overflow:hidden, asi que cualquier empuje lateral lo
@@ -447,25 +450,22 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   }
   .ini {
     font-family: 'Segatta', cursive;
-    font-size: 120px;
+    font-size: clamp(80px, 30.8cqi, 120px);
     line-height: 1;
     color: var(--ink);
   }
   .rest {
     font-family: 'Segatta', cursive;
-    font-size: 108px;
+    font-size: clamp(72px, 27.7cqi, 108px);
     letter-spacing: 0;
     text-transform: none;
     color: var(--ink);
   }
-  /* "&" detras de los nombres (idea de la referencia ANA & FERNANDO):
-     absoluto y centrado en el bloque de nombres. Tamano moderado: pisa
-     PARCIALMENTE los nombres (no los tapa). z-index 0 -> los nombres
-     (z-index 1) quedan legibles encima y el & asoma en los huecos.
-     text-align center para que el glifo quede bien centrado en su caja. */
+  /* "&" equidistante: margin-top y margin-bottom iguales (-16px) compensan el gap
+     de flex por igual en ambos lados -> mismo espacio de Sofi→& que de &→Fede. */
   .hero-amp {
     font-family: 'Velvet Hammer', cursive;
-    font-size: 140px;
+    font-size: clamp(95px, 35.9cqi, 140px);
     line-height: 0.8;
     color: var(--ink);
     opacity: 0.45;
@@ -474,6 +474,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     z-index: 2;
     pointer-events: none;
     margin-top: -16px;
+    margin-bottom: -20px;
   }
   /* ===== ENTRADA de los nombres: fundido + leve subida =====
      "Agus & Santi" entra con un fundido parejo (iniciales y resto de cada
@@ -1517,7 +1518,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
               </div>
             </div>
             <div class="field">
-              <label>Preferencia de menú</label>
+              <label>Preferencia de menú en caso de restricciones</label>
               <div class="radio-group chips g-menu">
                 <label data-val="vegano"><span class="mk"></span>Vegano</label>
                 <label data-val="vegetariano"><span class="mk"></span>Vegetariano</label>
@@ -1545,7 +1546,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
               </div>
             </div>
             <div class="field">
-              <label>Preferencia de menú</label>
+              <label>Preferencia de menú en caso de restricciones</label>
               <div class="radio-group chips g-menu">
                 <label data-val="vegano"><span class="mk"></span>Vegano</label>
                 <label data-val="vegetariano"><span class="mk"></span>Vegetariano</label>
@@ -1575,7 +1576,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
            Para REACTIVAR: descomentar la linea de abajo.
       -->
       <div class="stop-body">
-        <h2 class="stop-title reveal"><span class="accent-italic">Cada<br/>vez</span> falta menos</h2>
+        <h2 class="stop-title reveal">Cada<br/>vez falta menos</h2>
         <p class="big-date reveal" aria-label="08 de agosto de 2026">08 · 08 · 26</p>
         <div class="count reveal" id="countdown">
           <div class="count-cell"><span class="count-num" data-cd="days">—</span><span class="count-lbl">Días</span></div>
@@ -1729,7 +1730,9 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
         if (document.fonts && document.fonts.load) {
           Promise.all([
             document.fonts.load('93px "New Icon Script"'),
-            document.fonts.load('75px "New Icon Serif"')
+            document.fonts.load('75px "New Icon Serif"'),
+            document.fonts.load('120px "Segatta"'),
+            document.fonts.load('140px "Velvet Hammer"')
           ]).then(playNames).catch(playNames);
           setTimeout(playNames, 1200);  // red de seguridad si fonts.load cuelga
         } else {
