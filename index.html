@@ -18,7 +18,7 @@
 // SOFI & FEDE — TODO(fase A/brief): fijar la fecha real de la boda. Placeholder lejano
 // para que FOTOS quede oculta por defecto hasta definirla.
 var fm=/[?&]fotos=(on|off)\b/.exec(s);
-var fotosOn=fm?fm[1]==="on":Date.now()>=new Date('2026-08-08T00:00:00-03:00').getTime();
+var fotosOn=fm?fm[1]!=="off":true;
 if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 
 <!-- ==========================================================================
@@ -33,7 +33,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
 <script>
   window.WEDDING_CFG = {
     RSVP_ENDPOINT: 'https://script.google.com/macros/s/AKfycbzPuj2J7LZbf6QRbeGqZxWKxvqQLYxFfCmYwNnkz7csaoqV-pv7sDourFQvEG7UfOo99g/exec',
-    PHOTOS_URL:    'https://drive.google.com/drive/folders/10y7K8UQFRgv-dd2bpzaI9XDZVIO7YCMK?usp=sharing'
+    PHOTOS_URL:    'https://drive.google.com'
   };
 </script>
 
@@ -462,7 +462,11 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     color: var(--ink);
   }
   /* "&" equidistante: margin-top y margin-bottom iguales (-16px) compensan el gap
-     de flex por igual en ambos lados -> mismo espacio de Sofi→& que de &→Fede. */
+     de flex por igual en ambos lados -> mismo espacio de Sofi→& que de &→Fede.
+     padding horizontal: el glifo Velvet Hammer tiene left bearing negativo — el
+     trazo izquierdo arranca fuera del bounding box. iOS Safari clipea ese overflow
+     en contenedores flex aunque no haya overflow:hidden explícito. El padding da
+     espacio al swash para que no se corte (el glifo queda centrado igual). */
   .hero-amp {
     font-family: 'Velvet Hammer', cursive;
     font-size: clamp(95px, 35.9cqi, 140px);
@@ -475,6 +479,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
     pointer-events: none;
     margin-top: -16px;
     margin-bottom: -20px;
+    padding: 0 80px;
   }
   /* ===== ENTRADA de los nombres: fundido + leve subida =====
      "Agus & Santi" entra con un fundido parejo (iniciales y resto de cada
@@ -1175,7 +1180,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
   /* nombres 50px mas arriba. Va con .reveal.in porque esa clase (animacion de
      entrada) setea transform:none y pisaria un transform puesto en .foot-names
      sola; este selector tiene mas especificidad y gana (jun 2026). */
-  .foot-names.reveal.in { transform: translateY(-160px); }
+  .foot-names.reveal.in { transform: translateY(-250px); }
   .foot-names .f-ini {
     font-family: 'Segatta', cursive;
     font-size: 90px;
@@ -1481,7 +1486,7 @@ if(!fotosOn)d.setAttribute("data-fotos","locked");})();</script>
           <span class="photos-sumar">Sumá</span>
           <span class="photos-sub">tus fotos</span>
         </h2>
-        <p class="stop-lead reveal">Sacá fotos durante la fiesta y subilas al álbum compartido. Escaneá el código en el salón o entrá desde el link.</p>
+        <p class="stop-lead reveal">Sacá fotos durante la fiesta y subilas al álbum compartido.</p>
         <div class="photos reveal">
           <img id="photos-qr" class="photos-qr" alt="Código QR para subir fotos" src="">
         </div>
